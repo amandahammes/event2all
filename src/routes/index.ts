@@ -9,6 +9,6 @@ routes.get("/", (req: Request, res: Response) => {
 });
 
 routes.use(event);
-routes.use("/quotation", quotation);
+routes.use(quotation);
 
 export default routes;
