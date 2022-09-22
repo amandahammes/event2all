@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
-import event from "./event"
+import event from "./event";
+import quotation from "./quotation";
 
 const routes = Router();
 
@@ -8,5 +9,6 @@ routes.get("/", (req: Request, res: Response) => {
 });
 
 routes.use(event);
+routes.use("/quotation", quotation);
 
 export default routes;
