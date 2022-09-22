@@ -2,7 +2,7 @@
   "compilerOptions": {
   "target": "es2018",
   "lib": ["es5", "es6", "ES2018"],
-  "experimentalDecorators": true,
+  "experimentalDecorators": true, 
   "emitDecoratorMetadata": true,
   "module": "commonjs",
   "moduleResolution": "node",
