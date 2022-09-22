@@ -1,9 +1,11 @@
+import { Quotation } from './Quotation';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToMany
 } from "typeorm";
 import { Length } from "class-validator";
 
@@ -33,4 +35,9 @@ export class Event {
     nullable: false
   })
   updated_at: Date;
+
+  @OneToMany(() => Event, (event) => event.quotation)
+  quotation:Quotation
+
+
 }
