@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique } from "typeorm"
 import { Length, IsNotEmpty, IsEmail } from "class-validator"
 import * as bcrypt from "bcryptjs"
+import { Event } from "./Event"
 
 @Entity("user")
 export class User {
@@ -29,7 +30,8 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date
 
-    //relacionamentos
+    @OneToMany(() => Event, (event) => event.user)
+    event: Event[]
 
     hashPassword(){
         return this.password = bcrypt.hashSync(this.password, 8)
