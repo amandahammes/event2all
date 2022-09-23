@@ -31,6 +31,11 @@ export class User {
 
     //relacionamentos
 
+
+/* Giordano: não acho uma boa essas funções dentro da entidade pois não creio 
+ser responsabilidade do usuário hashear a propria senha, fiz tudo pelo
+controller */
+
     hashPassword(){
         return this.password = bcrypt.hashSync(this.password, 8)
     }
