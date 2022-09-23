@@ -1,5 +1,7 @@
+import { userRepository } from './../repositories/userRepository';
 import { eventRepository } from '../repositories/eventRepository';
 import { Event } from "./../entities/Event";
+import { User } from '../entities/User';
 import { Response, Request } from "express";
 import { validate } from "class-validator";
 import { EntityNotFoundError } from "typeorm";
@@ -7,14 +9,25 @@ import { EntityNotFoundError } from "typeorm";
 export class EventController {
 
   static async createEvent(req: Request, res: Response) {
-    const {idUser, place, name, date} = req.body;
+    const {event_id, place, name, date} = req.body;
 
-    let event: Event
+    let user: User;
+    try {
+      user = await userRepository.findOneOrFail({
+        where: { id: Number(event_id)},
+      });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).send("User not found");
+      }
+        return res.status(500).json(error);
+    }
+
     const newEvent = eventRepository.create({
-      // idUser,
       place,
       name,
       date,
+      user_id: user,
     });
     const errors = await validate(newEvent);
     if (errors.length > 0) {

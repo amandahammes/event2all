@@ -3,7 +3,7 @@ import { Router } from "express";
 
 const router = Router();
 
-router.post("/event", EventController.createEvent)
+router.post("/event", EventController.createEvent) //Ok
 router.get("/event", EventController.getAllEvents)
 router.get("/event/:idUser([0-9]+)", EventController.getEventbyIdUser)
 router.put("/event", )

@@ -30,7 +30,7 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(() => Event, (event) => event.user)
+    @OneToMany(() => Event, (event) => event.user_id)
     event: Event[]
 
     hashPassword(){
