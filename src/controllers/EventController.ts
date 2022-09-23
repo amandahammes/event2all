@@ -9,7 +9,7 @@ import { EntityNotFoundError } from "typeorm";
 export class EventController {
 
   static async createEvent(req: Request, res: Response) {
-    let {event_id, place, name, date} = req.body; //Ver se é event_id ou user_id
+    let {user_id, place, name, date} = req.body;
     
     date = new Date(date).toISOString();
 
@@ -18,7 +18,7 @@ export class EventController {
     
     try {
       user = await userRepository.findOneOrFail({
-        where: { id: Number(event_id)},
+        where: { id: Number(user_id)},
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
