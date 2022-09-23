@@ -146,4 +146,12 @@ export class EventController {
 
     return res.status(204).send();
   }
+
+  static async listAllExpected_Expense(req: Request, res: Response) {
+    
+  }
+
+  static async listAllExpense(req: Request, res: Response) {
+    
+  }
 }

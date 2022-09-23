@@ -32,7 +32,7 @@ export class Quotation{
     updateDateColumn: Date;
 
     @ManyToOne(()=> Event, (event) => event.quotation)
-    @JoinColumn({name: 'quotation_id'})
+    @JoinColumn({name: 'event_id'})
     event: Event
    
 };
