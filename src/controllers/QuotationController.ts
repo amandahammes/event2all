@@ -8,15 +8,18 @@ export class QuotationController {
 
     static async createQuotation(req: Request, res: Response) {
 
-        const {idEvent,description, provider, expected_expense} = req.body;
+        const {event_id,description, provider, expected_expense} = req.body;
 
-        const event = await eventRepository.findOneOrFail({where:{id:idEvent}});//confirmar qual id buscar para criar o quotation
-
-        if(!event){
-            return res.status(404).json({message:"Event not found."});
+        let event;
+        try {
+            event = await eventRepository.findOneOrFail({where:{id:event_id}});
+        } catch (error) {
+            return res.status(404).send("Event Not Found");
         }
 
+
         const newQuotation = quotationRepository.create({
+            event_id,
             description,
             provider,
             expected_expense,
@@ -39,7 +42,7 @@ export class QuotationController {
           quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}})  
             return res.send(200).send(quotation);
         } catch (error) {
-            res.send(404).send("Quotation does not exist.")
+            return res.send(404).send("Quotation does not exist.")
         };
         
         
@@ -86,29 +89,27 @@ export class QuotationController {
     };
 
     static async getAllQuotationByEventId (req:Request, res:Response){
-        const eventId:any = req.params;
+        const event_id:any = req.params;
         
         let event; 
-        try {  
-            event = eventRepository.findOneOrFail({where:{id:eventId}})
+        try {
+            event = await eventRepository.findOneOrFail({where:{id:event_id}});
         } catch (error) {
-            res.status(404).send(error);
-        };
+            return res.status(404).send("Event Not Found");
+        }
 
         let quotation : any;
 
         try {
             quotation = await quotationRepository.find({
                 where:{
-                    event_id:{
-                        id:eventId
-                    }
+                    event_id:event_id
                 }
             });
 
             return res.status(200).send(quotation);
         } catch (error) {
-            res.status(404).send(error);
+            return res.status(404).send(error);
         }
 
     }
