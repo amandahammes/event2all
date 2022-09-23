@@ -16,7 +16,7 @@
   "noImplicitAny": true,
   "strictPropertyInitialization": false
 },
-"include": ["src/*/"],
+"include": ["src/*/", "src/database/datasourse.ts"],
 "exclude": ["node_modules", "dist"],
 "ts-node": {
   "files": true
