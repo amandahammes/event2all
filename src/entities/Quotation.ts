@@ -1,5 +1,5 @@
 import { Event } from './Event';
-import { Column, Entity,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Length } from "class-validator";
 
 @Entity("quotation")
