@@ -11,7 +11,7 @@ export class EventController {
 
     let event: Event
     const newEvent = eventRepository.create({
-      idUser,
+      // idUser,
       place,
       name,
       date,
