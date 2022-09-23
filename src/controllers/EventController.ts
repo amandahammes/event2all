@@ -55,11 +55,11 @@ export class EventController {
   }
 
   static async getEventbyIdUser(req: Request, res: Response) {
-    const idUser = req.params.idUser;
-    let event: Event;
+    const { idUser } = req.params;
+    let user: User;
 
     try {
-      event = await eventRepository.findOneOrFail({
+      user = await userRepository.findOneOrFail({
         where: { id: Number(idUser)},
       });
     } catch (error) {
@@ -69,8 +69,81 @@ export class EventController {
       return res.status(500).json(error);
     }
 
-    return res.send(event)
+    let allEventsbyUser: Array<Event>;
+    try {
+      allEventsbyUser = await eventRepository.find({
+        where: { user_id: {id: Number(idUser)}}
+      });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+    
+    return res.send(allEventsbyUser)
   }
 
-  // static async editUser(req: Request, res: Response)
+  static async editUser(req: Request, res: Response) {
+    const id = req.params.id;
+
+    const { place, name, date } = req.body;
+    let event: Event;
+    try {
+      event = await eventRepository.findOneOrFail({
+        where: { id: Number(id)}
+      });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).send("User not found");
+      }
+      return res.status(500).json(error);
+    }
+
+    if (place) {
+      event.place = place
+    }
+    if (name) {
+      event.name = name
+    }
+    if (date) {
+      event.date = date
+    }
+
+    const errors = await validate(event);
+    if (errors.length > 0) {
+      return res.status(400).send(errors);
+    }
+
+    try {
+      await eventRepository.save(event);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+
+    return res.status(204).send();
+  }
+
+  static async deleteEvent(req: Request, res: Response) {
+    const id = req.params.id;
+    let event: Event;
+    try {
+      event = await eventRepository.findOneOrFail({
+        where: { id: Number(id)}
+      });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).send("User not found");
+      }
+      return res.status(500).json(error);
+    }
+
+    try {
+      eventRepository.delete(id);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(400).json(error.message);
+      }
+      return res.status(500).json(error);
+    }
+
+    return res.status(204).send();
+  }
 }
