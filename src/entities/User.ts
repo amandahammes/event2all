@@ -18,7 +18,7 @@ export class User {
     email: string
 
     @Column()
-    @Length(6, 30)
+    @Length(6, 60)
     @IsNotEmpty()
     password: string
 

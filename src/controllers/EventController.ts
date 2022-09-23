@@ -1,3 +1,5 @@
+import { quotationRepository } from './../repositories/quotationRepository';
+import { Quotation } from './../entities/Quotation';
 import { userRepository } from './../repositories/userRepository';
 import { eventRepository } from '../repositories/eventRepository';
 import { Event } from "./../entities/Event";
@@ -9,12 +11,12 @@ import { EntityNotFoundError } from "typeorm";
 export class EventController {
 
   static async createEvent(req: Request, res: Response) {
-    const {event_id, place, name, date} = req.body;
+    const {user_id, place, name, date} = req.body;
 
     let user: User;
     try {
       user = await userRepository.findOneOrFail({
-        where: { id: Number(event_id)},
+        where: { id: Number(user_id)},
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
@@ -47,7 +49,6 @@ export class EventController {
     try {
       allEvents = await eventRepository.find()
     } catch (error) {
-      console.log(error);
       return res.status(500).send("Internal Server Error");
     }
 
@@ -148,10 +149,18 @@ export class EventController {
   }
 
   static async listAllExpected_Expense(req: Request, res: Response) {
-    
+    const id = req.params.id
+    let quotation: any
+    try {
+      quotation = await quotationRepository.createQueryBuilder("quotation").where("quatation.event_id").addSelect("SUM(quatation.expected_expense)", "sum").groupBy("quatation.event_id").getRawMany()
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+
+    return res.send(quotation)
   }
 
-  static async listAllExpense(req: Request, res: Response) {
+  // static async listAllExpense(req: Request, res: Response) {
     
-  }
+  // }
 }
