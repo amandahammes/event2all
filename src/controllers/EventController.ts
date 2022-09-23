@@ -1,5 +1,6 @@
 import { userRepository } from './../repositories/userRepository';
 import { eventRepository } from '../repositories/eventRepository';
+import { quotationRepository } from '../repositories/quotationRepository';
 import { Event } from "./../entities/Event";
 import { User } from '../entities/User';
 import { Response, Request } from "express";
@@ -155,7 +156,15 @@ export class EventController {
   }
 
   static async listAllExpected_Expense(req: Request, res: Response) {
-    
+    const id = req.params.id
+    let quotation: any
+    try {
+      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id").addSelect("SUM(quatation.expected_expense)", "sum").groupBy("quatation.event_id").getRawMany()
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+
+    return res.send(quotation)
   }
 
   static async listAllExpense(req: Request, res: Response) {
