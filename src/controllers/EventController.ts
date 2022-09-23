@@ -1,4 +1,4 @@
-import { eventRepository } from './../repositores/eventRepository';
+import { eventRepository } from '../repositories/eventRepository';
 import { Event } from "./../entities/Event";
 import { Response, Request } from "express";
 import { validate } from "class-validator";

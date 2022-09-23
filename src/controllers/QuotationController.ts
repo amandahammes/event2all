@@ -1,5 +1,5 @@
-import { eventRepository } from './../repositores/eventRepository';
-import { quotationRepository } from './../repositores/quotationRepository';
+import { eventRepository } from '../repositories/eventRepository';
+import { quotationRepository } from '../repositories/quotationRepository';
 import { Quotation } from "./../entities/Quotation";
 import { Response, Request } from "express";
 import { validate } from "class-validator";
