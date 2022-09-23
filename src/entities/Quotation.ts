@@ -33,6 +33,6 @@ export class Quotation{
 
     @ManyToOne(()=> Event, (event) => event.quotation)
     @JoinColumn({name: 'event_id'})
-    event: Event
+    event_id: Event
    
 };

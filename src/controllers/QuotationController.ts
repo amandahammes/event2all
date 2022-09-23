@@ -28,10 +28,25 @@ export class QuotationController {
 
         return res.status(201).send("Quotation created.")
 
-    }
+    };
+
+    static async getQuotationById(req:Request, res:Response){
+        let idQuotation: any = req.params;
+
+        let quotation;
+
+        try {
+          quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}})  
+            return res.send(200).send(quotation);
+        } catch (error) {
+            res.send(404).send("Quotation does not exist.")
+        };
+        
+        
+    };
 
     static async editQuotation(req:Request, res:Response) {
-        const idQuotation : any = req.params;
+        let idQuotation:any = req.params;
 
         const {description, provider, expected_expense, actual_expense, amount_already_paid} = req.body;
 
@@ -69,6 +84,51 @@ export class QuotationController {
         return res.status(200).send("Quotation updated");
     
     };
+
+    static async getAllQuotationByEventId (req:Request, res:Response){
+        const eventId:any = req.params;
+        
+        let event; 
+        try {  
+            event = eventRepository.findOneOrFail({where:{id:eventId}})
+        } catch (error) {
+            res.status(404).send(error);
+        };
+
+        let quotation : any;
+
+        try {
+            quotation = await quotationRepository.find({
+                where:{
+                    event_id:{
+                        id:eventId
+                    }
+                }
+            });
+
+            return res.status(200).send(quotation);
+        } catch (error) {
+            res.status(404).send(error);
+        }
+
+    }
+
+    static async deleteQuotation (req:Request, res:Response){
+        let idQuotation:any = req.params;
+
+        let quotation: Quotation;
+
+        try{
+            quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}});
+        }catch(error){
+            return res.status(404).send("Id not Found!");
+        }
+
+
+        quotationRepository.delete(idQuotation);
+
+        return res.status(204).send();
+    }
 
 
 }
