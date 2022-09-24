@@ -1,12 +1,14 @@
 import { AppDataSource } from "./database/datasource";
 import express from "express";
 import routes from "./routes";
+import cookie from "cookie-parser";
 // var cool = require('cool-ascii-faces');
 var cors = require('cors');
 
 AppDataSource.initialize().then(() => {
   const app = express();
 
+  app.use(cookie())
   app.use(cors())
   app.use(express.json());
 
