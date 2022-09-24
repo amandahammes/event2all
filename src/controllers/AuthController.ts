@@ -1,6 +1,6 @@
 import { validate } from 'class-validator'
 import { User } from './../entities/User'
-import { userRepository } from './../repositores/userRepository'
+import { userRepository } from '../repositories/userRepository'
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 
