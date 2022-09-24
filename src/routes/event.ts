@@ -1,9 +1,11 @@
+import { checkToken } from './../middlewares/checkToken';
+import { checkJwt } from './../middlewares/checkJwt';
 import { EventController } from './../controllers/EventController';
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/event", EventController.createEvent) //Ok
+router.post("/event",[checkToken],[checkJwt], EventController.createEvent) //Ok
 router.get("/event", EventController.getAllEvents) //Ok
 router.get("/event/:idUser([0-9]+)", EventController.getEventbyIdUser) //Ok
 router.put("/event/:id([0-9]+)", EventController.editUser) //Ok

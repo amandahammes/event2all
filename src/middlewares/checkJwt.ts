@@ -1,24 +1,25 @@
-// import {Request, Response, NextFunction} from "express";
-// import * as jwt from "jsonwebtoken";
+import {Request, Response, NextFunction} from "express";
+import * as jwt from "jsonwebtoken";
 
 
-// export const checkJwt = (req:Request, res:Response, next:NextFunction) =>{
-//     const token = req.cookies.token
-//     console.log(token)
+export const checkJwt = (req:Request, res:Response, next:NextFunction) =>{
+    const token = <any>req.headers["auth"]
+    let jwtPayLoad
 
-//     if (!token) {
-//         return res.status(401).end()
-//     }
+    try{
+        jwtPayLoad = <any>jwt.verify(token, process.env.JWT_SECRET??"")
+        res.locals.jwtPayload = jwtPayLoad
+    }catch(error:any){
+        return res.status(401).send()
+    };
 
-//     let payload
+    
+    const {id, email} = jwtPayLoad;
+    const newToken = jwt.sign({id, email}, process.env.JWT_SECRET??"", {
+        expiresIn: "1h"
+    })
 
-//     try {
-//         payload = jwt.verify(token, process.env.JWT_SECRET??"");
-//     } catch (error) {
-//     if (error instanceof jwt.JsonWebTokenError) {
-//         return res.status(401).end()
-//     }
-//     return res.status(400).end()
-//     }
-//     next()
-// }
+     res.setHeader("token", newToken)
+
+    next()
+}

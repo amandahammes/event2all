@@ -39,10 +39,10 @@ export class AuthController {
 
     static changePassword = async (req:Request, res:Response) =>{
         const token = <any>req.headers["auth"];
-        console.log(token)
+
 
         if (!token) {
-            return res.status(401).end()
+            return res.status(401).send("Not logged.")
         }
 
         let payload

@@ -12,7 +12,12 @@ export class EventController {
   static async createEvent(req: Request, res: Response) {
     let {user_id, place, name, date} = req.body;
     
-    date = new Date(date).toISOString();
+    try {
+      date = new Date(date).toISOString();
+    } catch (error) {
+      return res.status(406).send(error)
+    }
+    
 
     let user: User;
     console.log(date);
@@ -91,8 +96,12 @@ export class EventController {
 
     let { place, name, date } = req.body;
 
-    date = new Date(date).toISOString();
-
+    try {
+      date = new Date(date).toISOString();
+    } catch (error) {
+      return res.status(406).send(error)
+    }
+    
     let event: Event;
     try {
       event = await eventRepository.findOneOrFail({
