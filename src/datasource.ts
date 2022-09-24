@@ -17,7 +17,7 @@ const options: DataSourceOptions & SeederOptions = {
     logging: false,
     entities: [`${__dirname}/**/entities/*.{ts,js}`],
     migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
-    seeds: [MainSeeder]
+    // seeds: [MainSeeder]
 }
 
 export const AppDataSource = new DataSource(options)

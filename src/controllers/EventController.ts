@@ -156,6 +156,27 @@ export class EventController {
   }
 
   static async listAllExpected_Expense(req: Request, res: Response) {
+    let id = req.params.id
+    
+    let quotation: any
+    
+    try {
+      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id").addSelect("SUM(quotation.expected_expense)", "sum").groupBy("quotation.event_id").getRawMany()  
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+    
+    try {
+      quotation.unshift([{o:1}])
+      const {quotation_event_id, sum} = quotation[id]
+      return res.json({quotation_event_id,sum})
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+    
+  }
+
+  static async listAllExpense(req: Request, res: Response) {
     const id = req.params.id
 
     let quotation: any
@@ -165,22 +186,9 @@ export class EventController {
     } catch (error) {
       return res.status(400).send(error);
     }
+    const {quotation_event_id, sum} = quotation[id]
 
-    return res.send(quotation)
-  }
-
-  static async listAllExpense(req: Request, res: Response) {
-    const id = req.params.id
-
-    let quotation: any
-
-    try {
-      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id",{event_id:id}).addSelect("SUM(quotation.expected_expense)", "sum").groupBy("quotation.event_id").getRawMany()
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-
-    return res.send(quotation)
+    return res.json({quotation_event_id,sum})
   }
 }
 
