@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique } from "typeorm"
+import { Event } from './Event';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique, ManyToOne, JoinColumn } from "typeorm"
 import { Length, IsNotEmpty, IsEmail } from "class-validator"
 
 @Entity("guest")
@@ -19,8 +20,6 @@ export class Guest {
     @IsNotEmpty()
     phone: string
 
-    //status????
-
     @Column()
     @CreateDateColumn()
     createdAt: Date
@@ -29,5 +28,8 @@ export class Guest {
     @UpdateDateColumn()
     updatedAt: Date
 
-    //relacionamentos
+    @ManyToOne(() => Event, event => event.guest)
+    @JoinColumn({name: 'event_id'})
+    event: Event
+
 }

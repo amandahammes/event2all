@@ -1,11 +1,15 @@
+import { User } from './User';
 import { Quotation } from './Quotation';
+import { Guest } from "./Guest"
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany
+  OneToMany,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
 import { Length } from "class-validator";
 
@@ -36,8 +40,15 @@ export class Event {
   })
   updated_at: Date;
 
-  @OneToMany(() => Event, (event) => event.quotation)
-  quotation:Quotation
+  @ManyToOne(() => User, (user) => user.event)
+  @JoinColumn({name: 'user_id'})
+  user_id: User
+
+  @OneToMany(() => Quotation, quotation => quotation.event_id)
+  quotation: Quotation[]
+
+  @OneToMany(() => Guest, (guest) => guest.event)
+  guest: Guest[]
 
 
 }
