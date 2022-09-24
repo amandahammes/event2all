@@ -1,4 +1,5 @@
-import { AppDataSource } from "./database/datasource";
+import { AppDataSource } from "./datasource";
+
 import express from "express";
 import routes from "./routes";
 // var cool = require('cool-ascii-faces');

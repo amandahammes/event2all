@@ -1,5 +1,5 @@
 import { Event } from './Event';
-import { Column, Entity,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Unique, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Length } from "class-validator";
 
 @Entity("quotation")
@@ -32,7 +32,7 @@ export class Quotation{
     updateDateColumn: Date;
 
     @ManyToOne(()=> Event, (event) => event.quotation)
+    @JoinColumn({name: 'event_id'})
+    event_id: Event
    
-    @JoinColumn({ name :"event_id"})
-    event: Event
 };
