@@ -6,14 +6,14 @@ export const checkJwt = (req:Request, res:Response, next: NextFunction) => {
     let jwtPayLoad
 
     try {
-        jwtPayLoad = <any>jwt.verify(token, process.env.JWT_PASS) //process.env.JWT_SECRET
+        jwtPayLoad = <any>jwt.verify(token, "123456") //process.env.JWT_SECRET
         res.locals.jwtPayLoad = jwtPayLoad
     } catch (error) {
         return res.status(401).send()
     }
 
     const {id, email} = jwtPayLoad
-    const newToken = jwt.sign({id, email}, process.env.JWT_PASS, {expiresIn: "8h"})
+    const newToken = jwt.sign({id, email}, "123456", {expiresIn: "8h"})
     res.setHeader("token", newToken)
     res.send({id,email});
 

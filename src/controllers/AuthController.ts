@@ -28,7 +28,9 @@ export class AuthController {
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'})
 
         const {password: _, ...userLogin} = user
-        return res.json({
+        return res
+        .cookie("token", token)
+        .json({
             user: userLogin,
             token: token,
         })
