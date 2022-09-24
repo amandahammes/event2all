@@ -1,12 +1,10 @@
 import 'dotenv/config'
 import 'reflect-metadata'
-import { DataSource, DataSourceOptions } from "typeorm";
-import { SeederOptions } from "typeorm-extension"
-import { MainSeeder } from './seeds/MainSeeder';
+import { DataSource } from "typeorm";
 
 const port = process.env.DB_PORT as number | undefined
 
-const options: DataSourceOptions & SeederOptions = {
+export const AppDataSource = new DataSource({
     type: 'mysql',
     host: process.env.DB_HOST,
     port: port,
@@ -16,8 +14,5 @@ const options: DataSourceOptions & SeederOptions = {
     synchronize: true,
     logging: false,
     entities: [`${__dirname}/**/entities/*.{ts,js}`],
-    migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
-    seeds: [MainSeeder]
-}
-
-export const AppDataSource = new DataSource(options)
+    migrations: [`${__dirname}/**/migrations/*.{ts,js}`]
+})

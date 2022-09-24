@@ -1,5 +1,6 @@
 import { validate } from 'class-validator'
 import { User } from './../entities/User'
+<<<<<<< HEAD
 import { userRepository } from './../repositories/userRepository'
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcryptjs";
@@ -8,6 +9,15 @@ import { Request, Response } from 'express';
 export class AuthController {
 
     static async auth(req: Request, res: Response) {
+=======
+import { userRepository } from '../repositories/userRepository'
+import jwt from 'jsonwebtoken'
+import { Request, Response } from 'express'
+
+export class AuthController {
+
+    async login(req: Request, res: Response) {
+>>>>>>> 03665f06cb379f21d6cbad4bd162fa6e82aac796
         const {email, password} = req.body
 
         if(typeof password != "string"){
@@ -26,7 +36,11 @@ export class AuthController {
             return res.status(401).send("Email or password not valid!")
         }
 
+<<<<<<< HEAD
         const token = jwt.sign({id: user.id}, "123456" ?? '', {expiresIn: '8h'}) //Alterar o jwt secret
+=======
+        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'})
+>>>>>>> 03665f06cb379f21d6cbad4bd162fa6e82aac796
 
         const {password: _, ...userLogin} = user
         
