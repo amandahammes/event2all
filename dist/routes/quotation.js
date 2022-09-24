@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const QuotationController_1 = require("./../controllers/QuotationController");
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+router.post("/quotation", QuotationController_1.QuotationController.createQuotation);
+router.get("/quotation/:id([0-9]+)", QuotationController_1.QuotationController.getQuotationById);
+router.get("/quotation/event/:id([0-9]+)", QuotationController_1.QuotationController.getAllQuotationByEventId);
+router.put("/quotation/:id([0-9]+)", QuotationController_1.QuotationController.editQuotation);
+router.delete("/quotation/:id([0-9]+)", QuotationController_1.QuotationController.deleteQuotation);
+exports.default = router;
