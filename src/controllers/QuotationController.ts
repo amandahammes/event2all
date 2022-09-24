@@ -34,29 +34,28 @@ export class QuotationController {
     };
 
     static async getQuotationById(req:Request, res:Response){
-        let idQuotation: any = req.params;
+        let idQuotation: any = req.params.id;
 
         let quotation;
 
         try {
           quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}})  
-            return res.send(200).send(quotation);
         } catch (error) {
-            return res.send(404).send("Quotation does not exist.")
+            return res.status(404).send("Quotation does not exist.")
         };
         
-        
+        return res.status(200).send(quotation);
     };
 
     static async editQuotation(req:Request, res:Response) {
-        let idQuotation:any = req.params;
+        let id_quotation :any = req.params.id;
 
         const {description, provider, expected_expense, actual_expense, amount_already_paid} = req.body;
 
         let quotation: Quotation;
 
         try{
-            quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}});
+            quotation = await quotationRepository.findOneOrFail({where:{id:id_quotation}});
         }catch(error){
             return res.status(404).send("Id not Found!");
         }
