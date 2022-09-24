@@ -6,7 +6,7 @@ const router = Router();
 router.route("/quotation").post(QuotationController.createQuotation);
 
 router
-  .route("/quotation/:id([0-9]+")
+  .route("/quotation/:id([0-9]+)")
   .get(QuotationController.getQuotationById)
   .put(QuotationController.editQuotation)
   .delete(QuotationController.deleteQuotation);
