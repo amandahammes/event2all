@@ -13,7 +13,6 @@ routes.get("/", (req: Request, res: Response) => {
 router.use(user)
 routes.use(event);
 routes.use(quotation);
-routes.use(user);
 
 
 export default routes;

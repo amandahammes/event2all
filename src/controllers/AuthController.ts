@@ -6,7 +6,7 @@ import { Request, Response } from 'express'
 
 export class AuthController {
 
-    async auth (req: Request, res: Response) {
+    async login(req: Request, res: Response) {
         const {email, password} = req.body
 
         if(typeof password != "string"){
@@ -25,7 +25,7 @@ export class AuthController {
             return res.status(401).send("Email or password not valid!")
         }
 
-        const token = jwt.sign({id: user.id}, process.env.JWT_PASS ?? '', {expiresIn: '8h'})
+        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'})
 
         const {password: _, ...userLogin} = user
         return res.json({
