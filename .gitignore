@@ -9,4 +9,4 @@ tmp/
 temp/
 tests
 .migrations
-.dist
+.dist/

@@ -26,7 +26,7 @@ export class AuthController {
             return res.status(401).send("Email or password not valid!")
         }
 
-        const token = jwt.sign({id: user.id}, "123456" ?? '', {expiresIn: '8h'}) //Alterar o jwt secret
+        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'}) //Alterar o jwt secret
 
         const {password: _, ...userLogin} = user
         
@@ -39,7 +39,7 @@ export class AuthController {
     }
 
     static changePassword = async (req:Request, res:Response) =>{
-        const token : string  = req.cookies
+        const token = req.cookies.token
         console.log(token)
 
         if (!token) {
@@ -49,7 +49,7 @@ export class AuthController {
         let payload
 
 	    try {
-		    payload = jwt.verify(token, "123456");
+		    payload = jwt.verify(token, process.env.JWT_SECRET??"");
 	    } catch (error) {
 		if (error instanceof jwt.JsonWebTokenError) {
 			return res.status(401).end()
