@@ -41,10 +41,10 @@ export class Event {
   updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.event)
-  @JoinColumn({name: 'event_id'})
-  user: User
+  @JoinColumn({name: 'user_id'})
+  user_id: User
 
-  @OneToMany(() => Quotation, quotation => quotation.event)
+  @OneToMany(() => Quotation, quotation => quotation.event_id)
   quotation: Quotation[]
 
   @OneToMany(() => Guest, (guest) => guest.event)

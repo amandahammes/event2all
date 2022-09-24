@@ -18,7 +18,7 @@ export class User {
     email: string
 
     @Column()
-    @Length(6, 30)
+    @Length(6, 60)
     @IsNotEmpty()
     password: string
 
@@ -30,7 +30,7 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(() => Event, (event) => event.user)
+    @OneToMany(() => Event, (event) => event.user_id)
     event: Event[]
 
     hashPassword(){
