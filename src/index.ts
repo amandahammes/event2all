@@ -1,5 +1,4 @@
 import { AppDataSource } from "./datasource";
-
 import express from "express";
 import routes from "./routes";
 import cookie from "cookie-parser";
