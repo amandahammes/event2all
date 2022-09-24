@@ -43,7 +43,6 @@
         "jsonwebtoken": "^8.5.1",
         "mysql2": "^2.3.3",
         "reflect-metadata": "^0.1.13",
-        "typeorm": "^0.3.10",
-        "typeorm-extension": "^2.1.10"
+        "typeorm": "^0.3.10"
     }
 }
