@@ -8,6 +8,11 @@ import { QueryFailedError, EntityNotFoundError } from "typeorm";
 export class UserController {
   static async createUser(req: Request, res: Response) {
     const { name, email, password } = req.body;
+    
+    if(typeof password != "string" ){
+      return res.status(404).send("Invalid type of parameters on request!")
+  }
+  
     const encryptedPw = bcrypt.hashSync(password, 10);
     const user: User = userRepository.create({
       name,

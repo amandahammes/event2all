@@ -1,7 +1,10 @@
 import { Router, Request, Response } from "express";
+import router from "./event";
 import event from "./event";
 import quotation from "./quotation";
 import user from "./user";
+import auth from "./auth";
+import guest from "./guest";
 
 const routes = Router();
 
@@ -9,8 +12,11 @@ routes.get("/", (req: Request, res: Response) => {
   return res.json("Api running");
 });
 
+router.use(user)
 routes.use(event);
-routes.use(user);
-routes.use("/quotation", quotation);
+routes.use(quotation);
+routes.use(auth);
+routes.use(guest);
+
 
 export default routes;

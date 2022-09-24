@@ -1,12 +1,13 @@
 import { validate } from 'class-validator'
 import { User } from './../entities/User'
-import { userRepository } from './../repositores/userRepository'
-import jwt from 'jsonwebtoken'
-import { Request, Response } from 'express'
+import { userRepository } from './../repositories/userRepository'
+import jwt from 'jsonwebtoken';
+import bcrypt from "bcryptjs";
+import { Request, Response } from 'express';
 
 export class AuthController {
 
-    async auth (req: Request, res: Response) {
+    static async auth(req: Request, res: Response) {
         const {email, password} = req.body
 
         if(typeof password != "string"){
@@ -25,18 +26,38 @@ export class AuthController {
             return res.status(401).send("Email or password not valid!")
         }
 
-        const token = jwt.sign({id: user.id}, process.env.JWT_PASS ?? '', {expiresIn: '8h'})
+        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'}) //Alterar o jwt secret
 
         const {password: _, ...userLogin} = user
-        return res.json({
+        
+        return res
+            .json({
             user: userLogin,
             token: token,
         })
     }
 
     static changePassword = async (req:Request, res:Response) =>{
-        const id = res.locals.jwtPayLoad.id
+        const token = <any>req.headers["auth"];
 
+
+        if (!token) {
+            return res.status(401).send("Not logged.")
+        }
+
+        let payload
+
+	    try {
+		    payload = jwt.verify(token, process.env.JWT_SECRET??"");
+	    } catch (error) {
+		if (error instanceof jwt.JsonWebTokenError) {
+			return res.status(401).end()
+		}
+		return res.status(400).end()
+	    }
+
+        const {id} : any = payload
+        
         let {oldPassword, newPassword} = req.body
 
         if(!(oldPassword && newPassword)){
@@ -58,14 +79,12 @@ export class AuthController {
         if(errors.length > 0) {
             return res.status(400).send(errors)
         }
-
-        user.password = newPassword
-        newPassword = user.hashPassword()
+        newPassword = bcrypt.hashSync(newPassword, 10);
+        user.password = newPassword;
+        
 
         userRepository.save(user)
 
         return res.status(204).send("Password changed!")
     }
 }
-
-export default AuthController
