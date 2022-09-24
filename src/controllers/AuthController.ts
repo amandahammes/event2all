@@ -31,7 +31,6 @@ export class AuthController {
         const {password: _, ...userLogin} = user
         
         return res
-            .cookie("token", token)
             .json({
             user: userLogin,
             token: token,
@@ -39,7 +38,7 @@ export class AuthController {
     }
 
     static changePassword = async (req:Request, res:Response) =>{
-        const token = req.cookies.token
+        const token = <any>req.headers["auth"];
         console.log(token)
 
         if (!token) {
