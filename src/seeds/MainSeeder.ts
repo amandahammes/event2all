@@ -5,6 +5,7 @@ import { QuotationSeeder } from "./QuotationSeeder";
 import { UserSeeder } from "./UserSeeder";
 import { EventSeeder } from "./EventSeeder";
 
+
 export class MainSeeder implements Seeder {
     async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void>{
         await runSeeder(dataSource, UserSeeder)

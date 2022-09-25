@@ -33,9 +33,9 @@ export class User {
     @OneToMany(() => Event, (event) => event.user_id)
     event: Event[]
 
-    hashPassword(){
-        return this.password = bcrypt.hashSync(this.password, 8)
-    }
+    // hashPassword(){
+    //     return this.password = bcrypt.hashSync(this.password, 8)
+    // }
 
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string){
         return bcrypt.compareSync(unencryptedPassword, this.password)

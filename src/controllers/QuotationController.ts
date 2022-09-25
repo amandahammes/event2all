@@ -34,29 +34,28 @@ export class QuotationController {
     };
 
     static async getQuotationById(req:Request, res:Response){
-        let idQuotation: any = req.params;
+        let id_quotation = req.params.id;
 
         let quotation;
 
         try {
-          quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}})  
-            return res.send(200).send(quotation);
+          quotation = await quotationRepository.findOneOrFail({where:{id : Number(id_quotation)}})  
         } catch (error) {
-            return res.send(404).send("Quotation does not exist.")
+            return res.status(404).send("Quotation does not exist.")
         };
         
-        
+        return res.status(200).send(quotation);
     };
 
     static async editQuotation(req:Request, res:Response) {
-        let idQuotation:any = req.params;
+        let id_quotation = req.params.id;
 
         const {description, provider, expected_expense, actual_expense, amount_already_paid} = req.body;
 
         let quotation: Quotation;
 
         try{
-            quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}});
+            quotation = await quotationRepository.findOneOrFail({where:{id : Number(id_quotation)}});
         }catch(error){
             return res.status(404).send("Id not Found!");
         }
@@ -89,11 +88,11 @@ export class QuotationController {
     };
 
     static async getAllQuotationByEventId (req:Request, res:Response){
-        const event_id:any = req.params;
+        const event_id = req.params;
         
         let event; 
         try {
-            event = await eventRepository.findOneOrFail({where:{id:event_id}});
+            event = await eventRepository.findOneOrFail({where:{id : Number(event_id)}});
         } catch (error) {
             return res.status(404).send("Event Not Found");
         }
@@ -115,18 +114,18 @@ export class QuotationController {
     }
 
     static async deleteQuotation (req:Request, res:Response){
-        let idQuotation:any = req.params;
+        let id_quotation = req.params;
 
         let quotation: Quotation;
 
         try{
-            quotation = await quotationRepository.findOneOrFail({where:{id:idQuotation}});
+            quotation = await quotationRepository.findOneOrFail({where:{id : Number(id_quotation)}});
         }catch(error){
             return res.status(404).send("Id not Found!");
         }
 
 
-        quotationRepository.delete(idQuotation);
+        quotationRepository.delete(id_quotation);
 
         return res.status(204).send();
     }

@@ -1,13 +1,18 @@
-import { QuotationController } from './../controllers/QuotationController';
+import { QuotationController } from "./../controllers/QuotationController";
 import { Router } from "express";
 
 const router = Router();
 
-router.post("/quotation", QuotationController.createQuotation);
-router.get("/quotation/:id([0-9]+)", QuotationController.getQuotationById);
-router.get("/quotation/event/:id([0-9]+)", QuotationController.getAllQuotationByEventId);
-router.put("/quotation/:id([0-9]+)", QuotationController.editQuotation);
-router.delete("/quotation/:id([0-9]+)", QuotationController.deleteQuotation);
+router.route("/quotation").post(QuotationController.createQuotation);
 
+router
+  .route("/quotation/:id([0-9]+)")
+  .get(QuotationController.getQuotationById)
+  .put(QuotationController.editQuotation)
+  .delete(QuotationController.deleteQuotation);
+
+router
+  .route("/quotation/event/:id([0-9]+)")
+  .get(QuotationController.getAllQuotationByEventId);
 
 export default router;

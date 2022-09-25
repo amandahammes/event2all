@@ -12,7 +12,12 @@ export class EventController {
   static async createEvent(req: Request, res: Response) {
     let {user_id, place, name, date} = req.body;
     
-    date = new Date(date).toISOString();
+    try {
+      date = new Date(date).toISOString();
+    } catch (error) {
+      return res.status(406).send(error)
+    }
+    
 
     let user: User;
     console.log(date);
@@ -91,8 +96,12 @@ export class EventController {
 
     let { place, name, date } = req.body;
 
-    date = new Date(date).toISOString();
-
+    try {
+      date = new Date(date).toISOString();
+    } catch (error) {
+      return res.status(406).send(error)
+    }
+    
     let event: Event;
     try {
       event = await eventRepository.findOneOrFail({
@@ -156,17 +165,28 @@ export class EventController {
   }
 
   static async listAllExpected_Expense(req: Request, res: Response) {
-    const id = req.params.id
-
+    let id = req.params.id
+    
     let quotation: any
-
+    
     try {
-      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id",{event_id:id}).addSelect("SUM(quotation.actual_expense)", "sum").groupBy("quotation.event_id").getRawMany()
+      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id = :event_id", {event_id:id}).addSelect("SUM(quotation.expected_expense)", "sum").groupBy("quotation.event_id").getRawOne();  
     } catch (error) {
       return res.status(400).send(error);
     }
+    
+    try {
+      const {quotation_event_id, sum} = quotation
 
-    return res.send(quotation)
+      let expected_sum_event = {
+        event_id:quotation_event_id,
+        expected_expense:sum
+      }
+      return res.json(expected_sum_event)
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+    
   }
 
   static async listAllExpense(req: Request, res: Response) {
@@ -175,12 +195,22 @@ export class EventController {
     let quotation: any
 
     try {
-      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id",{event_id:id}).addSelect("SUM(quotation.expected_expense)", "sum").groupBy("quotation.event_id").getRawMany()
+      quotation = await quotationRepository.createQueryBuilder("quotation").where("quotation.event_id=:event_id",{event_id:id}).addSelect("SUM(quotation.actual_expense)", "sum").groupBy("quotation.event_id").getRawOne()
     } catch (error) {
       return res.status(400).send(error);
     }
 
-    return res.send(quotation)
+    try {
+      const {quotation_event_id, sum} = quotation
+
+      let actual_sum_event = {
+        event_id:quotation_event_id,
+        actual_expense:sum
+      }
+      return res.json(actual_sum_event)
+    } catch (error) {
+      return res.status(400).send(error);
+    }
   }
 }
 
