@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
-  "target": "es2018",
-  "lib": ["es5", "es6", "ES2018"],
-  "experimentalDecorators": true, 
-  "emitDecoratorMetadata": true,
-  "module": "commonjs",
-  "moduleResolution": "node",
-  "resolveJsonModule": true,
-  "allowJs": true,
-  "outDir": "./dist",
-  "rootDir": "./src",
-  "esModuleInterop": true,
-  "forceConsistentCasingInFileNames": true,
-  "strict": true,
-  "noImplicitAny": true,
-  "strictPropertyInitialization": false
-},
-"include": ["src/*/", "src/database/datasourse.ts"],
-"exclude": ["node_modules", "dist"],
-"ts-node": {
-  "files": true
-}
+    "target": "es2018",
+    "lib": ["es5", "es6", "ES2018"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictPropertyInitialization": false
+  },
+  "include": ["src/*/", "src/database/datasourse.ts"],
+  "exclude": ["node_modules", "dist"],
+  "ts-node": {
+    "files": true
+  }
 }
