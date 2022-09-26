@@ -1,11 +1,13 @@
-import { quotationRepository } from './../repositories/quotationRepository';
+import { Event } from './../entities/Event';
 import { Quotation } from "../entities/Quotation";
 import { DataSource } from "typeorm";
 import { Seeder, SeederFactoryManager } from "typeorm-extension";
-import { eventRepository } from './../repositories/eventRepository';
 
 export class QuotationSeeder implements Seeder {
-    async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void>{
+    public async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void>{
+        const quotationRepository = dataSource.getRepository(Quotation);
+        const eventRepository = dataSource.getRepository(Event);
+
         const description = "Músicos"
         const provider = "Banda Eva"
         const expected_expense = 100.000
@@ -20,7 +22,7 @@ export class QuotationSeeder implements Seeder {
                 expected_expense,
                 amount_already_paid
             })
-            await quotationRepository.save(newQuotation)
+            await quotationRepository.insert(newQuotation)
         }
     }
 }

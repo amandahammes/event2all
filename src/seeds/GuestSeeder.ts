@@ -1,14 +1,15 @@
-import { eventRepository } from './../repositories/eventRepository';
-import { guestRepository } from './../repositories/guestRepository';
+import { Guest } from './../entities/Guest';
+import { Event } from './../entities/Event';
 import { DataSource } from "typeorm";
 import { Seeder, SeederFactoryManager } from "typeorm-extension";
 
 export class GuestSeeder implements Seeder {
-    async run (dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void>{
+    public async run (dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<void>{
         const name = "Aline"
         const email = "aline@gmail.com"
         const phone = "123456789"
-
+        const  eventRepository = dataSource.getRepository(Event)
+        const  guestRepository = dataSource.getRepository(Guest)
         const eventSeed = await eventRepository.findOneBy({id: Number(1)})
 
         if (eventSeed) {
@@ -17,7 +18,7 @@ export class GuestSeeder implements Seeder {
                 email,
                 phone
             })
-            await guestRepository.save(newGuest)
+            await guestRepository.insert(newGuest)
         }
 
     }
