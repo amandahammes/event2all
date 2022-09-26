@@ -10,3 +10,6 @@ temp/
 tests
 .migrations
 .dist/
+dist/
+dist
+.dist
