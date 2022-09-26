@@ -4,7 +4,6 @@ import { GuestSeeder } from './GuestSeeder';
 import { Seeder, runSeeder, SeederFactoryManager } from "typeorm-extension"
 import { QuotationSeeder } from "./QuotationSeeder";
 import { UserSeeder } from "./UserSeeder";
-import { EventSeeder } from "./EventSeeder";
 
 
 export class MainSeeder implements Seeder {

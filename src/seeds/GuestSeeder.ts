@@ -11,8 +11,7 @@ export class GuestSeeder implements Seeder {
         const name = "Aline"
         const email = "aline@gmail.com"
         const phone = "123456789"
-        const  eventRepository = dataSource.getRepository(Event)
-        const  guestRepository = dataSource.getRepository(Guest)
+        
         const eventSeed = await eventRepository.findOneBy({id: Number(1)})
 
         if (eventSeed) {
