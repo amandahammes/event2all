@@ -5,7 +5,7 @@ const router = Router();
 
 router
   .route("/user")
-  .post([checkJwt],UserController.createUser)
+  .post(UserController.createUser)
   .get([checkJwt],UserController.listAll);
 router
   .route("/user/:id([0-9]+)")
