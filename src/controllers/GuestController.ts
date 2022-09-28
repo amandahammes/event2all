@@ -5,7 +5,7 @@ import { validate } from "class-validator"
 
 export class GuestController {
     static async createGuest(req: Request, res: Response) {
-        const { name, email, phone, event_id } = req.body
+        const { name, email, phone, birth_date, event_id } = req.body
 
         const event = await eventRepository.findOneBy({id: event_id})
 
@@ -15,6 +15,7 @@ export class GuestController {
             name,
             email,
             phone,
+            birth_date,
             event
         })
 
@@ -46,7 +47,7 @@ export class GuestController {
     }
 
     static async editGuest(req: Request, res: Response) {
-        const { name, email, phone } = req.body
+        const { name, email, phone, birth_date } = req.body
         const { id } = req.params
 
         const guest = await guestRepository.findOneBy({id: Number(id)}) 
@@ -56,6 +57,7 @@ export class GuestController {
         if(name) guest.name = name
         if(email) guest.email = email
         if(phone) guest.phone = phone
+        if(birth_date) guest.birth_date = birth_date
 
         const errors = await validate(guest)
 

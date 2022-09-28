@@ -7,7 +7,7 @@ import { QueryFailedError, EntityNotFoundError } from "typeorm";
 
 export class UserController {
   static async createUser(req: Request, res: Response) {
-    const { name, email, password } = req.body;
+    const { name, email, password, birth_date } = req.body;
     
     if(typeof password != "string" ){
       return res.status(404).send("Invalid type of parameters on request!")
@@ -17,6 +17,7 @@ export class UserController {
     const user: User = userRepository.create({
       name,
       email,
+      birth_date,
       password: encryptedPw,
     });
 
@@ -64,7 +65,7 @@ export class UserController {
   static async editUser(req: Request, res: Response) {
     const id = req.params.id;
 
-    const { name, email } = req.body;
+    const { name, email, birth_date } = req.body;
     let user: User;
     try {
       user = await userRepository.findOneOrFail({ where: { id: Number(id) } });
@@ -80,6 +81,10 @@ export class UserController {
     if (email) {
       user.email = email;
     }
+    if (birth_date) {
+      user.birth_date = birth_date;
+    }
+
     const errors = await validate(user);
     if (errors.length > 0) {
       return res.status(400).send(errors);
