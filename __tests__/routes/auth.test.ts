@@ -7,7 +7,7 @@ beforeAll(async() => {
   });
   
 afterAll(() => {
-    AppDataSource.close()
+    AppDataSource.destroy()
 });
 
 describe("Auth route tests", () => {

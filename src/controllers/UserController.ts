@@ -8,11 +8,11 @@ import { QueryFailedError, EntityNotFoundError } from "typeorm";
 export class UserController {
   static async createUser(req: Request, res: Response) {
     const { name, email, password } = req.body;
-    
-    if(typeof password != "string" ){
-      return res.status(404).send("Invalid type of parameters on request!")
-  }
-  
+
+    if (typeof password != "string") {
+      return res.status(404).send("Invalid type of parameters on request!");
+    }
+
     const encryptedPw = bcrypt.hashSync(password, 10);
     const user: User = userRepository.create({
       name,
@@ -65,6 +65,7 @@ export class UserController {
     const id = req.params.id;
 
     const { name, email } = req.body;
+    //busca um usuário com o id enviado
     let user: User;
     try {
       user = await userRepository.findOneOrFail({ where: { id: Number(id) } });
@@ -73,30 +74,37 @@ export class UserController {
         return res.status(404).send("User not found");
       return res.status(500).json(error);
     }
-
+    //checa se veio email e nome na requisiçao e verfica se ja existe o email cadastrado
     if (name) {
       user.name = name;
     }
     if (email) {
       user.email = email;
-    }
-    const errors = await validate(user);
-    if (errors.length > 0) {
-      return res.status(400).send(errors);
-    }
-
-    try {
+      try {
         const userWithSameEmail = await userRepository.findOne({
           where: { email: user.email },
         });
         if (userWithSameEmail)
           return res.status(409).send("Email already in use");
-        await userRepository.save(user);
       } catch (error) {
         return res.status(500).json(error);
       }
-  
-      return res.status(204).send();
+    }
+    //valida o usuário
+    const errors = await validate(user);
+    if (errors.length > 0) {
+      return res.status(400).send(errors);
+    }
+    //salva o usuário no banco
+    try {
+      await userRepository.save(user);
+    } catch (error) {
+      if (error instanceof QueryFailedError)
+        return res.status(400).json(error.message);
+      return res.status(500).json(error);
+    }
+
+    return res.status(204).send();
   }
 
   static async listAll(req: Request, res: Response) {

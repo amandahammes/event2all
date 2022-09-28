@@ -18,7 +18,7 @@ export class AuthController {
     try {
       user = await userRepository.findOneOrFail({ where: { email } });
     } catch (error) {
-      return res.status(404).send("User not found!");
+      return res.status(404).send("Email or password not valid!");
     }
 
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
