@@ -1,7 +1,6 @@
 import { AppDataSource } from "./datasource";
 import express from "express";
 import routes from "./routes";
-// var cool = require('cool-ascii-faces');
 var cors = require('cors');
 
 

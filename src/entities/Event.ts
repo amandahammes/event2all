@@ -51,4 +51,9 @@ export class Event {
   guest: Guest[]
 
 
+  formatDate(date:string){
+    let splitDate = date.split("/");
+    return splitDate.reverse().join("/");
+  }
+
 }

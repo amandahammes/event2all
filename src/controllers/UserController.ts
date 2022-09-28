@@ -12,12 +12,21 @@ export class UserController {
     if(typeof password != "string" ){
       return res.status(404).send("Invalid type of parameters on request!")
   }
-  
+
+    let new_birth_date;
+    try {
+      let splitDate = birth_date.split("/");
+      splitDate.reverse().join("/");
+      new_birth_date = new Date(splitDate);
+    } catch (error) {
+      return res.status(400).send("Invalid Date Format");
+    }
+
     const encryptedPw = bcrypt.hashSync(password, 10);
     const user: User = userRepository.create({
       name,
       email,
-      birth_date,
+      birth_date: new_birth_date,
       password: encryptedPw,
     });
 
@@ -75,6 +84,15 @@ export class UserController {
       return res.status(500).json(error);
     }
 
+    let new_birth_date;
+    try {
+      let splitDate = birth_date.split("/");
+      splitDate.reverse().join("/");
+      new_birth_date = new Date(splitDate);
+    } catch (error) {
+      return res.status(400).send("Invalid Date Format");
+    }
+
     if (name) {
       user.name = name;
     }
@@ -82,7 +100,7 @@ export class UserController {
       user.email = email;
     }
     if (birth_date) {
-      user.birth_date = birth_date;
+      user.birth_date = new_birth_date;
     }
 
     const errors = await validate(user);
