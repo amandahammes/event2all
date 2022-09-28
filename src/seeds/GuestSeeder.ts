@@ -11,7 +11,7 @@ export class GuestSeeder implements Seeder {
         const name = "Aline"
         const email = "aline@gmail.com"
         const phone = "123456789"
-
+        
         const eventSeed = await eventRepository.findOneBy({id: Number(1)})
 
         if (eventSeed) {
@@ -20,7 +20,7 @@ export class GuestSeeder implements Seeder {
                 email,
                 phone
             })
-            await guestRepository.save(newGuest)
+            await guestRepository.insert(newGuest)
         }
 
     }

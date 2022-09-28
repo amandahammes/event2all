@@ -17,7 +17,7 @@ export class UserSeeder implements Seeder {
 
         if(!userExists){
             const newUser = userRepository.create(userData)
-            await userRepository.save(newUser)
+            await userRepository.insert(newUser)
         }
 
     }
