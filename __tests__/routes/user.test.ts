@@ -1,83 +1,64 @@
+import { User } from "./../../src/entities/User";
 import app from "../../src/app";
 import request from "supertest";
 import { AppDataSource } from "../../src/datasource";
 
 const randomstring = (Math.random() + 1).toString(36).substring(7);
-var token = "";
+let token = "";
 
 beforeAll(async () => {
   await AppDataSource.initialize();
   const response = await request(app).post("/login").send({
-    "email": "bob2@gmail.com",
-    "password": "1234",
+    email: "bob2@gmail.com",
+    password: "1234",
   });
   token = response.body.token;
 });
 
 afterAll(() => {
-  AppDataSource.destroy();
+  AppDataSource.getRepository(User).clear;
 });
 
+/* afterEach(async () => {
+
+  // Fetch all the entities
+  const entities = AppDataSource.entityMetadatas;
+
+  for (const entity of entities) {
+      const repository = AppDataSource.getRepository(entity.name); // Get repository
+      await repository.clear(); // Clear each entity table's content
+  }
+}); */
+
 describe("users route tests", () => {
-  /* test("create user", async () => {
-    await request(app)
-      .post("/user")
-      .send({
-        name: randomstring,
-        email: randomstring + "@teste.com",
-        password: "123456"
-      })
-      .expect(201);
-  });
-
-  test("create user with password length lass then 5 digits", async () => {
-    await request(app)
-      .post("/user")
-      .send({
-        name: randomstring,
-        email: randomstring + "B" + "@teste.com",
-        password: "123"
-      })
-      .expect(400);
-  });
-
-  test("create user email already exist", async () => {
-    await request(app)
-      .post("/user")
-      .send({
-        name: randomstring,
-        email: "bob2@gmail.com",
-        password: "123456"
-      })
-      .expect(409);
-  }); */
 
   test("edit user", async () => {
     await request(app)
       .put("/user/1")
       .send({
-        name: "editedtest"
+        name: "editedtest",
       })
       .set("auth", token)
       .expect(204);
   });
+
   test("edit user same email", async () => {
     await request(app)
       .put("/user/1")
       .send({
-        email: "bob2@gmail.com"
+        email: "bob2@gmail.com",
       })
       .set("auth", token)
       .expect(409);
   });
 
-  /* test("fail edit user, incorrect token", async () => {
+  test("fail edit user, incorrect token", async () => {
     await request(app)
       .put("/user/1")
       .send({
         name: "editedtest",
       })
-      .set("Authorization", "tokenIncorrect")
+      .set("auth", "tokenIncorrect")
       .expect(401);
-  }); */
+  });
 });
