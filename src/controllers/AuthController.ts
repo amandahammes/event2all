@@ -38,7 +38,7 @@ export class AuthController {
     }
 
     static changePassword = async (req:Request, res:Response) =>{
-        const token = <any>req.headers["auth"];
+        const token = <any>req.header("Authorization")?.replace("Bearer ", "")
 
 
         if (!token) {

@@ -7,16 +7,26 @@ import { QueryFailedError, EntityNotFoundError } from "typeorm";
 
 export class UserController {
   static async createUser(req: Request, res: Response) {
-    const { name, email, password } = req.body;
+    const { name, email, password, birth_date } = req.body;
     
     if(typeof password != "string" ){
       return res.status(404).send("Invalid type of parameters on request!")
   }
-  
+
+    let new_birth_date;
+    try {
+      let splitDate = birth_date.split("/");
+      splitDate.reverse().join("/");
+      new_birth_date = new Date(splitDate);
+    } catch (error) {
+      return res.status(400).send("Invalid Date Format");
+    }
+
     const encryptedPw = bcrypt.hashSync(password, 10);
     const user: User = userRepository.create({
       name,
       email,
+      birth_date: new_birth_date,
       password: encryptedPw,
     });
 
@@ -64,7 +74,7 @@ export class UserController {
   static async editUser(req: Request, res: Response) {
     const id = req.params.id;
 
-    const { name, email } = req.body;
+    const { name, email, birth_date } = req.body;
     let user: User;
     try {
       user = await userRepository.findOneOrFail({ where: { id: Number(id) } });
@@ -74,12 +84,25 @@ export class UserController {
       return res.status(500).json(error);
     }
 
+    let new_birth_date;
+    try {
+      let splitDate = birth_date.split("/");
+      splitDate.reverse().join("/");
+      new_birth_date = new Date(splitDate);
+    } catch (error) {
+      return res.status(400).send("Invalid Date Format");
+    }
+
     if (name) {
       user.name = name;
     }
     if (email) {
       user.email = email;
     }
+    if (birth_date) {
+      user.birth_date = new_birth_date;
+    }
+
     const errors = await validate(user);
     if (errors.length > 0) {
       return res.status(400).send(errors);
@@ -103,7 +126,7 @@ export class UserController {
     let users: Array<User> = [];
     try {
       users = await userRepository.find({
-        select: ["id", "name", "email"],
+        select: ["id", "name", "email","birth_date"],
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError)
@@ -119,7 +142,7 @@ export class UserController {
     try {
       user = await userRepository.findOneOrFail({
         where: { id: Number(id) },
-        select: ["id", "name", "email"],
+        select: ["id", "name", "email", "birth_date"],
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError)

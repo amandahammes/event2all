@@ -7,7 +7,7 @@
         "dev": "nodemon src/index.ts",
         "migration:generate": "typeorm-ts-node-commonjs -d ./src/datasource.ts migration:generate ./src/migrations/default",
         "migration:run": "typeorm-ts-node-commonjs -d ./src/datasource.ts migration:run",
-        "seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed -d ./src/datasource.ts",
+        "seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed -d datasource.ts",
         "build": "npx tsc",
         "start": "node dist/index.js"
     },
@@ -27,7 +27,6 @@
         "@types/node": "^18.7.18",
         "@types/validator": "^13.7.6",
         "nodemon": "^2.0.20",
-        "ts-node": "^10.9.1",
         "typescript": "^4.8.3"
     },
     "dependencies": {
@@ -36,13 +35,13 @@
         "bcrypt": "^5.0.1",
         "bcryptjs": "^2.4.3",
         "class-validator": "^0.13.2",
-        "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "dotenv": "^16.0.2",
         "express": "^4.18.1",
         "jsonwebtoken": "^8.5.1",
         "mysql2": "^2.3.3",
         "reflect-metadata": "^0.1.13",
+        "ts-node": "^10.9.1",
         "typeorm": "^0.3.10"
     }
 }

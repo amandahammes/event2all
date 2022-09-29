@@ -11,7 +11,7 @@ import {
   ManyToOne,
   JoinColumn
 } from "typeorm";
-import { Length } from "class-validator";
+import { Length, IsDate } from "class-validator";
 
 @Entity("event")
 export class Event {
@@ -27,7 +27,7 @@ export class Event {
   name: string;
 
   @Column()
-  @Length(1, 300)
+  @IsDate()
   date: Date;
 
   @CreateDateColumn({
@@ -50,5 +50,10 @@ export class Event {
   @OneToMany(() => Guest, (guest) => guest.event)
   guest: Guest[]
 
+
+  formatDate(date:string){
+    let splitDate = date.split("/");
+    return splitDate.reverse().join("/");
+  }
 
 }

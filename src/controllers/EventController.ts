@@ -12,10 +12,13 @@ export class EventController {
   static async createEvent(req: Request, res: Response) {
     let {user_id, place, name, date} = req.body;
     
+    let new_date;
     try {
-      date = new Date(date).toISOString();
+      let splitDate = date.split("/");
+      splitDate.reverse().join("/");
+      new_date = new Date(splitDate);
     } catch (error) {
-      return res.status(406).send(error)
+      return res.status(400).send("Invalid Date Format");
     }
     
 
@@ -36,7 +39,7 @@ export class EventController {
     const newEvent = eventRepository.create({
       place,
       name,
-      date,
+      date:new_date,
       user_id: user,
     });
     const errors = await validate(newEvent);
@@ -96,10 +99,13 @@ export class EventController {
 
     let { place, name, date } = req.body;
 
+    let new_date;
     try {
-      date = new Date(date).toISOString();
+      let splitDate = date.split("/");
+      splitDate.reverse().join("/");
+      new_date = new Date(splitDate);
     } catch (error) {
-      return res.status(406).send(error)
+      return res.status(400).send("Invalid Date Format");
     }
     
     let event: Event;
@@ -121,7 +127,7 @@ export class EventController {
       event.name = name
     }
     if (date) {
-      event.date = date
+      event.date = new_date
     }
 
     const errors = await validate(event);

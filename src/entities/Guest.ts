@@ -21,6 +21,9 @@ export class Guest {
     phone: string
 
     @Column()
+    birth_date: Date
+
+    @Column()
     @CreateDateColumn()
     createdAt: Date
 

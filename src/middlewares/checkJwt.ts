@@ -3,7 +3,11 @@ import * as jwt from "jsonwebtoken";
 
 
 export const checkJwt = (req:Request, res:Response, next:NextFunction) =>{
-    const token = <any>req.headers["auth"]
+    const token = <any>req.header("Authorization")?.replace("Bearer ", "")
+
+    if (!token) {
+        return res.status(401).send("Not logged.")
+    }
     let jwtPayLoad
 
     try{
@@ -19,7 +23,7 @@ export const checkJwt = (req:Request, res:Response, next:NextFunction) =>{
         expiresIn: "1h"
     })
 
-     res.setHeader("token", newToken)
+     res.setHeader("Authorization", "Bearer " + newToken)
 
     next()
 }
