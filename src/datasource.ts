@@ -1,8 +1,8 @@
-import 'dotenv/config'
-import 'reflect-metadata'
+import "dotenv/config";
+import "reflect-metadata";
 import { DataSource, DataSourceOptions } from "typeorm";
 
-const port = process.env.DB_PORT as number | undefined
+const port = process.env.DB_PORT as number | undefined;
 
 const options: DataSourceOptions = {
     type: 'mysql',
@@ -17,4 +17,4 @@ const options: DataSourceOptions = {
     migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
 }
 
-export const AppDataSource = new DataSource(options)
+export const AppDataSource = new DataSource(options);
