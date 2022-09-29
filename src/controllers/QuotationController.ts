@@ -58,17 +58,26 @@ export class QuotationController {
             quotation = await quotationRepository.findOneOrFail({where:{id : Number(id_quotation)}});
         }catch(error){
             return res.status(404).send("Id not Found!");
-        }
+        };
 
-        try {
+        if(description){
             quotation.description = description;
-            quotation.provider = provider;
-            quotation.expected_expense = expected_expense;
-            quotation.actual_expense = actual_expense;
-            quotation.amount_already_paid = amount_already_paid;
+        };
 
-        } catch (error) {
-            res.status(400).send("No valid body sent.")            
+        if(provider){
+            quotation.provider = provider;
+        };
+
+        if(expected_expense){
+            quotation.expected_expense = expected_expense;
+        };
+
+        if(actual_expense){
+            quotation.actual_expense = actual_expense;
+        };
+
+        if(amount_already_paid){
+            quotation.amount_already_paid = amount_already_paid;
         };
 
         const validation = await validate(quotation);
