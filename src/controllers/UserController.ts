@@ -126,7 +126,7 @@ export class UserController {
     let users: Array<User> = [];
     try {
       users = await userRepository.find({
-        select: ["id", "name", "email"],
+        select: ["id", "name", "email","birth_date"],
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError)
@@ -142,7 +142,7 @@ export class UserController {
     try {
       user = await userRepository.findOneOrFail({
         where: { id: Number(id) },
-        select: ["id", "name", "email"],
+        select: ["id", "name", "email", "birth_date"],
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError)
