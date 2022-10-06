@@ -80,7 +80,7 @@ export class EventController {
     
     other_user_id.push(id);
 
-    let user;
+    let user = other_user_id;
     
   
     let new_date;
@@ -94,20 +94,20 @@ export class EventController {
 
     try {
     
-      let qualquernome;
-      for(let i = 0; i <= other_user_id.length; i++){
-        try {
-          qualquernome = []
-          let idDescription = await userRepository.findOneBy({ id: Number(other_user_id[i])})
-          qualquernome.push(idDescription)
-        } catch (error) {
-          return res.status(400).send(error);
-        }
+    //   let qualquernome;
+    //   for(let i = 0; i <= other_user_id.length; i++){
+    //     try {
+    //       qualquernome = []
+    //       let idDescription = await userRepository.findOneBy({ id: Number(other_user_id[i])})
+    //       qualquernome.push(idDescription)
+    //     } catch (error) {
+    //       return res.status(400).send(error);
+    //     }
         
-        return qualquernome
-    }
+    //     return qualquernome
+    // }
     
-    user = qualquernome
+    // user = qualquernome
     console.log(user)
     if (!user) {
       return res.status(404).json({ message: 'User not found'})
