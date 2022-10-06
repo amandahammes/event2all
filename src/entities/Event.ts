@@ -31,6 +31,14 @@ export class Event {
   @IsDate()
   date: Date;
 
+  @Column()
+  @Length(1,10)
+  invite_number : number;
+
+  @Column()
+  @Length(1,1000)
+  event_budget : number;
+
   @CreateDateColumn({
     nullable: false
   })

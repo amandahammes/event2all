@@ -76,11 +76,11 @@ export class EventController {
 
     const {id} : any = payload
 
-    let {place, name, date, other_user_id} = req.body;
+    let {place, name, date, managers, event_budget, invite_number} = req.body;
     
-    other_user_id.push(id);
+    managers.push(id);
 
-    let user = other_user_id;
+    let user = managers;
     
   
     let new_date;
@@ -118,6 +118,8 @@ export class EventController {
     newEvent.name = name
     newEvent.date = new_date
     newEvent.users = user
+    newEvent.event_budget = event_budget
+    newEvent.invite_number = invite_number
 
     await eventRepository.save(newEvent)
 
