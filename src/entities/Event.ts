@@ -9,7 +9,8 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  ManyToMany
 } from "typeorm";
 import { Length, IsDate } from "class-validator";
 
@@ -40,9 +41,8 @@ export class Event {
   })
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.event)
-  @JoinColumn({name: 'user_id'})
-  user_id: User
+  @ManyToMany(() => User, user => user.events)
+  users: User[]
 
   @OneToMany(() => Quotation, quotation => quotation.event_id)
   quotation: Quotation[]
