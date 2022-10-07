@@ -33,7 +33,7 @@ export class EventController {
     const {id} : any = payload
 
     let {place, name, date, managers, event_budget, invite_number} = req.body;
-    
+
     managers.push(id);
 
      let new_date;
@@ -155,7 +155,7 @@ export class EventController {
   static async editUser(req: Request, res: Response) {
     const id = req.params.id;
 
-    let { place, name, date } = req.body;
+    let { place, name, date, event_budget, invite_number } = req.body;
 
     let new_date;
     try {
@@ -186,6 +186,13 @@ export class EventController {
     }
     if (date) {
       event.date = new_date
+    }
+    if (event_budget) {
+      console.log(event_budget)
+      event.event_budget = event_budget
+    }
+    if (invite_number) {
+      event.invite_number = invite_number
     }
 
     const errors = await validate(event);
