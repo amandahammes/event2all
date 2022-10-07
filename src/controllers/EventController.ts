@@ -77,7 +77,7 @@ export class EventController {
     const {id} : any = payload
 
     let {place, name, date, managers, event_budget, invite_number} = req.body;
-    
+
     managers.push(id);
 
     let user = managers;
@@ -130,37 +130,37 @@ export class EventController {
     }
     }
 
-  static async putAddUserinEvent(req: Request, res: Response) {
-    let {user_id, event_id} = req.body;
+  // static async putAddUserinEvent(req: Request, res: Response) {
+  //   let {user_id, event_id} = req.body;
 
-    try {
-      let user = await userRepository.findOneBy({ id: Number(user_id)}) 
+  //   try {
+  //     let user = await userRepository.findOneBy({ id: Number(user_id)}) 
 
-      if (!user) {
-        return res.status(404).json({ message: 'User not found'})
-      }
+  //     if (!user) {
+  //       return res.status(404).json({ message: 'User not found'})
+  //     }
 
-      let event = await eventRepository.findOneBy({ id: Number(event_id)})
+  //     let event = await eventRepository.findOneBy({ id: Number(event_id)})
 
-      if (!event) {
-        return res.status(404).json({ message: 'Event not found'})
-      }
+  //     if (!event) {
+  //       return res.status(404).json({ message: 'Event not found'})
+  //     }
 
-      if (user) {
-        event.users = [user]
-      }
+  //     if (user) {
+  //       event.users = [user]
+  //     }
 
-      try {
-        await eventRepository.save(event.users);
-      } catch (error) {
-        return res.status(500).json(error);
-      }
+  //     try {
+  //       await eventRepository.save(event.users);
+  //     } catch (error) {
+  //       return res.status(500).json(error);
+  //     }
 
-  } catch (error) {
-    return res.status(500).json(error);
-  }
+  // } catch (error) {
+  //   return res.status(500).json(error);
+  // }
 
-  }
+  // }
 
   static async getAllEvents(req: Request, res: Response) {
     let allEvents: Array<Event> = [];
@@ -174,37 +174,38 @@ export class EventController {
     return res.status(200).send(allEvents);
   }
 
-  // static async getEventbyIdUser(req: Request, res: Response) {
-  //   const { idUser } = req.params;
-  //   let user: User;
+  static async getEventbyIdUser(req: Request, res: Response) {
+    const { idUser } = req.params;
+    let user: User;
 
-  //   try {
-  //     user = await userRepository.findOneOrFail({
-  //       where: { id: Number(idUser)},
-  //     });
-  //   } catch (error) {
-  //     if (error instanceof EntityNotFoundError) {
-  //       return res.status(404).send("User not found");
-  //     }
-  //     return res.status(500).json(error);
-  //   }
+    try {
+      user = await userRepository.findOneOrFail({
+        where: { id: Number(idUser)},
+      });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).send("User not found");
+      }
+      return res.status(500).json(error);
+    }
 
-  //   let allEventsbyUser: Array<Event>;
-  //   try {
-  //     allEventsbyUser = await eventRepository.find({
-  //       where: { user_id: {id: Number(idUser)}}
-  //     });
-  //   } catch (error) {
-  //     return res.status(500).json(error);
-  //   }
+    let allEventsbyUser: Array<Event>;
+    try {
+      console.log([Number(idUser)])
+      allEventsbyUser = await eventRepository.find({
+        where: { users: [{id: Number(idUser)}]}
+      });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
     
-  //   return res.send(allEventsbyUser)
-  // }
+    return res.send(allEventsbyUser)
+  }
 
   static async editUser(req: Request, res: Response) {
     const id = req.params.id;
 
-    let { place, name, date } = req.body;
+    let { place, name, date, event_budget, invite_number } = req.body;
 
     let new_date;
     try {
@@ -235,6 +236,13 @@ export class EventController {
     }
     if (date) {
       event.date = new_date
+    }
+    if (event_budget) {
+      console.log(event_budget)
+      event.event_budget = event_budget
+    }
+    if (invite_number) {
+      event.invite_number = invite_number
     }
 
     const errors = await validate(event);

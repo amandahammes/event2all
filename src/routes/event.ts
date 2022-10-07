@@ -6,11 +6,11 @@ const router = Router();
 
 router
   .route("/event")
-  .put([checkJwt], EventController.putAddUserinEvent)
+  // .put([checkJwt], EventController.putAddUserinEvent)
   .get([checkJwt],EventController.getAllEvents); //Ok
   // .post([checkJwt], EventController.createEvent) //Ok
 
-// router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser); //Ok
+router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser); //Ok
 
 
 router
