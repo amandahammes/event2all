@@ -10,7 +10,7 @@ router
   .get([checkJwt],EventController.getAllEvents); //Ok
   // .post([checkJwt], EventController.createEvent) //Ok
 
-// router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser); //Ok
+router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser); //Ok
 
 
 router

@@ -10,50 +10,6 @@ import jwt from 'jsonwebtoken';
 
 export class EventController {
 
-  // static async createEvent(req: Request, res: Response) {
-  //   let {place, name, date} = req.body;
-    
-  //   let new_date;
-  //   try {
-  //     let splitDate = date.split("/");
-  //     splitDate.reverse().join("/");
-  //     new_date = new Date(splitDate);
-  //   } catch (error) {
-  //     return res.status(400).send("Invalid Date Format");
-  //   }
-    
-
-  //   let user: User;
-  //   console.log(date);
-    
-    // try {
-    //   user = await userRepository.findOneOrFail({
-    //     where: { id: Number(user_id)},
-    //   });
-    // } catch (error) {
-    //   if (error instanceof EntityNotFoundError) {
-    //     return res.status(404).send("User not found");
-    //   }
-    //     return res.status(500).json(error);
-    // }
-
-  //   const newEvent = eventRepository.create({
-  //     place,
-  //     name,
-  //     date:new_date,
-  //   });
-  //   const errors = await validate(newEvent);
-  //   if (errors.length > 0) {
-  //     return res.status(400).send(errors);
-  //   }
-
-  //   try {
-  //     await eventRepository.save(newEvent);
-  //   } catch (error) {
-  //     return res.status(500).json(error);
-  //   }
-  //   return res.status(201).json(newEvent);
-  // }
 
   static async createEventbyUser(req: Request, res: Response) {
     const token = <any>req.header("Authorization")?.replace("Bearer ", "")
@@ -80,46 +36,39 @@ export class EventController {
     
     managers.push(id);
 
-    let user = managers;
-    
-  
-    let new_date;
+     let new_date;
     try {
       let splitDate = date.split("/");
       splitDate.reverse().join("/");
       new_date = new Date(splitDate);
     } catch (error) {
       return res.status(400).send("Invalid Date Format");
-    }
+    } 
+  
+    const users = await Promise.all(managers.map((manager: number) => {
+      const user = userRepository.findOne({where: {id: manager}})
+  
+      if(!user) return null
+    
+
+      return user
+  }))
+  console.log(users)
+  
+  const usersExists = users.findIndex((element) => element == null)
+  
+  if(usersExists >= 0) return res.status(404).send("User not found")
 
     try {
     
-    //   let qualquernome;
-    //   for(let i = 0; i <= other_user_id.length; i++){
-    //     try {
-    //       qualquernome = []
-    //       let idDescription = await userRepository.findOneBy({ id: Number(other_user_id[i])})
-    //       qualquernome.push(idDescription)
-    //     } catch (error) {
-    //       return res.status(400).send(error);
-    //     }
-        
-    //     return qualquernome
-    // }
-    
-    // user = qualquernome
-    console.log(user)
-    if (!user) {
-      return res.status(404).json({ message: 'User not found'})
-    }
-
-    let newEvent = new Event();
-    newEvent.place = place
-    newEvent.name = name
-    newEvent.date = new_date
-    newEvent.users = user
-    newEvent.event_budget = event_budget
-    newEvent.invite_number = invite_number
+      const newEvent = eventRepository.create({
+        place,
+        name,
+        date:new_date,
+        users,
+        event_budget,
+        invite_number
+    });
 
     await eventRepository.save(newEvent)
 
@@ -147,7 +96,9 @@ export class EventController {
       }
 
       if (user) {
-        event.users = [user]
+        event.users =
+        console.log(user);
+        
       }
 
       try {
@@ -174,32 +125,32 @@ export class EventController {
     return res.status(200).send(allEvents);
   }
 
-  // static async getEventbyIdUser(req: Request, res: Response) {
-  //   const { idUser } = req.params;
-  //   let user: User;
+  static async getEventbyIdUser(req: Request, res: Response) {
+    const { idUser } = req.params;
+    let user: User;
 
-  //   try {
-  //     user = await userRepository.findOneOrFail({
-  //       where: { id: Number(idUser)},
-  //     });
-  //   } catch (error) {
-  //     if (error instanceof EntityNotFoundError) {
-  //       return res.status(404).send("User not found");
-  //     }
-  //     return res.status(500).json(error);
-  //   }
+    try {
+      user = await userRepository.findOneOrFail({
+        where: { id: Number(idUser)},
+      });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).send("User not found");
+      }
+      return res.status(500).json(error);
+    }
 
-  //   let allEventsbyUser: Array<Event>;
-  //   try {
-  //     allEventsbyUser = await eventRepository.find({
-  //       where: { user_id: {id: Number(idUser)}}
-  //     });
-  //   } catch (error) {
-  //     return res.status(500).json(error);
-  //   }
+    let allEventsbyUser: Array<Event>;
+    try {
+      allEventsbyUser = await eventRepository.find({
+        where: { users: {id: Number(idUser)}}
+      });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
     
-  //   return res.send(allEventsbyUser)
-  // }
+    return res.send(allEventsbyUser)
+  }
 
   static async editUser(req: Request, res: Response) {
     const id = req.params.id;
