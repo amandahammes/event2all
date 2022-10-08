@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique, ManyToMany, ManyToOne, JoinColumn, JoinTable } from "typeorm"
 import { Length, IsNotEmpty, IsEmail, IsDate } from "class-validator"
 import * as bcrypt from "bcryptjs"
 import { Event } from "./Event"
@@ -34,8 +34,20 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @OneToMany(() => Event, (event) => event.user_id)
-    event: Event[]
+    @ManyToMany(() => Event, event => event.users)
+    @JoinTable({
+        name: 'event_user',
+        joinColumn: {
+            name: 'event_id',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id',
+        },
+    })
+    events: Event[]
+       
 
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string){
         return bcrypt.compareSync(unencryptedPassword, this.password)

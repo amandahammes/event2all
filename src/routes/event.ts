@@ -6,15 +6,19 @@ const router = Router();
 
 router
   .route("/event")
-  .post([checkJwt], EventController.createEvent) //Ok
-  .get([checkJwt],EventController.getAllEvents); //Ok
+  .put([checkJwt], EventController.putAddUserinEvent)
+  .get([checkJwt],EventController.getAllEvents);
 
-router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser); //Ok
+router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser);
+
+
+router
+  .route("/event").post([checkJwt], EventController.createEventbyUser)
 
 router
   .route("/event/:id([0-9]+)")
-  .put([checkJwt],EventController.editUser) //Ok
-  .delete([checkJwt],EventController.deleteEvent); //Ok
+  .put([checkJwt],EventController.editEvent)
+  .delete([checkJwt],EventController.deleteEvent);
 
 router.get("/event/allExpectedExpense/:id([0-9]+)", [checkJwt], EventController.listAllExpected_Expense);
 router.get("/event/allActualExpense/:id([0-9]+)",[checkJwt],EventController.listAllExpense);

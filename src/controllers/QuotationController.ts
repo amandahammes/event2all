@@ -97,8 +97,9 @@ export class QuotationController {
     };
 
     static async getAllQuotationByEventId (req:Request, res:Response){
-        const event_id = req.params;
-        
+        const event_id = req.params.id;
+        let quotation_id = req.params; 
+
         let event; 
         try {
             event = await eventRepository.findOneOrFail({where:{id : Number(event_id)}});
@@ -111,7 +112,7 @@ export class QuotationController {
         try {
             quotation = await quotationRepository.find({
                 where:{
-                    event_id:event_id
+                    event_id:quotation_id
                 }
             });
 
@@ -123,7 +124,7 @@ export class QuotationController {
     }
 
     static async deleteQuotation (req:Request, res:Response){
-        let id_quotation = req.params;
+        let id_quotation = req.params.id;
 
         let quotation: Quotation;
 

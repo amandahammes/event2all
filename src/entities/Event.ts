@@ -9,7 +9,8 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  ManyToMany
 } from "typeorm";
 import { Length, IsDate } from "class-validator";
 
@@ -19,7 +20,7 @@ export class Event {
   id: number;
 
   @Column()
-  @Length(1, 300)
+  @Length(1, 50)
   place: string;
 
   @Column()
@@ -29,6 +30,14 @@ export class Event {
   @Column()
   @IsDate()
   date: Date;
+
+  @Column()
+  @Length(1,10)
+  invite_number : number;
+
+  @Column()
+  @Length(1,100)
+  event_budget : number;
 
   @CreateDateColumn({
     nullable: false
@@ -40,9 +49,8 @@ export class Event {
   })
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.event)
-  @JoinColumn({name: 'user_id'})
-  user_id: User
+  @ManyToMany(() => User, user => user.events)
+  users: User[]
 
   @OneToMany(() => Quotation, quotation => quotation.event_id)
   quotation: Quotation[]
@@ -50,10 +58,5 @@ export class Event {
   @OneToMany(() => Guest, (guest) => guest.event)
   guest: Guest[]
 
-
-  formatDate(date:string){
-    let splitDate = date.split("/");
-    return splitDate.reverse().join("/");
-  }
 
 }
