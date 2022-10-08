@@ -8,10 +8,10 @@ import { QueryFailedError, EntityNotFoundError } from "typeorm";
 export class UserController {
   static async createUser(req: Request, res: Response) {
     const { name, email, password, birth_date } = req.body;
-    
-    if(typeof password != "string" ){
-      return res.status(404).send("Invalid type of parameters on request!")
-  }
+
+    if (typeof password != "string") {
+      return res.status(404).send("Invalid type of parameters on request!");
+    }
 
     let new_birth_date;
     try {
@@ -98,6 +98,15 @@ export class UserController {
     }
     if (email) {
       user.email = email;
+      try {
+        const userWithSameEmail = await userRepository.findOne({
+          where: { email: user.email },
+        });
+        if (userWithSameEmail)
+          return res.status(409).send("Email already in use");
+      } catch (error) {
+        return res.status(500).json(error);
+      }
     }
     if (birth_date) {
       user.birth_date = new_birth_date;
@@ -109,24 +118,19 @@ export class UserController {
     }
 
     try {
-        const userWithSameEmail = await userRepository.findOne({
-          where: { email: user.email },
-        });
-        if (userWithSameEmail)
-          return res.status(409).send("Email already in use");
-        await userRepository.save(user);
-      } catch (error) {
-        return res.status(500).json(error);
-      }
-  
-      return res.status(204).send();
+      await userRepository.save(user);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+    
+    return res.status(204).send();
   }
 
   static async listAll(req: Request, res: Response) {
     let users: Array<User> = [];
     try {
       users = await userRepository.find({
-        select: ["id", "name", "email","birth_date"],
+        select: ["id", "name", "email", "birth_date"],
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError)
