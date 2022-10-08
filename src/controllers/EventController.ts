@@ -89,20 +89,20 @@ export class EventController {
         return res.status(404).json({ message: 'User not found'})
       }
 
-      let event = await eventRepository.findOneBy({ id: Number(event_id)})
+      let event = await eventRepository.find({relations:{users:true} })
 
       if (!event) {
         return res.status(404).json({ message: 'Event not found'})
       }
 
       if (user) {
-        event.users =
-        console.log(user);
+         event[-1 + event_id].users.push(user)
         
       }
 
       try {
-        await eventRepository.save(event.users);
+        await eventRepository.save(event);
+        return res.status(201).send(event)
       } catch (error) {
         return res.status(500).json(error);
       }
@@ -152,7 +152,7 @@ export class EventController {
     return res.send(allEventsbyUser)
   }
 
-  static async editUser(req: Request, res: Response) {
+  static async editEvent(req: Request, res: Response) {
     const id = req.params.id;
 
     let { place, name, date, event_budget, invite_number } = req.body;

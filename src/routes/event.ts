@@ -6,11 +6,10 @@ const router = Router();
 
 router
   .route("/event")
-  // .put([checkJwt], EventController.putAddUserinEvent)
-  .get([checkJwt],EventController.getAllEvents); //Ok
-  // .post([checkJwt], EventController.createEvent) //Ok
+  .put([checkJwt], EventController.putAddUserinEvent)
+  .get([checkJwt],EventController.getAllEvents);
 
-router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser); //Ok
+router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser);
 
 
 router
@@ -18,8 +17,8 @@ router
 
 router
   .route("/event/:id([0-9]+)")
-  .put([checkJwt],EventController.editUser) //Ok
-  .delete([checkJwt],EventController.deleteEvent); //Ok
+  .put([checkJwt],EventController.editEvent)
+  .delete([checkJwt],EventController.deleteEvent);
 
 router.get("/event/allExpectedExpense/:id([0-9]+)", [checkJwt], EventController.listAllExpected_Expense);
 router.get("/event/allActualExpense/:id([0-9]+)",[checkJwt],EventController.listAllExpense);

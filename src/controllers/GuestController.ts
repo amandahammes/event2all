@@ -5,25 +5,17 @@ import { validate } from "class-validator"
 
 export class GuestController {
     static async createGuest(req: Request, res: Response) {
-        const { name, email, phone, birth_date, event_id } = req.body
+        const { name, contact, invite, isConfirmed, event_id } = req.body
 
         const event = await eventRepository.findOneBy({id: event_id})
 
         if(!event) return res.status(404).json({error: "Event not found"})
 
-        let new_birth_date;
-        try {
-          let splitDate = birth_date.split("/");
-          splitDate.reverse().join("/");
-          new_birth_date = new Date(splitDate);
-        } catch (error) {
-          return res.status(400).send("Invalid Date Format");
-        }
         const newGuest = guestRepository.create({
             name,
-            email,
-            phone,
-            birth_date:new_birth_date,
+            contact: "",
+            invite: false,
+            isConfirmed: false,
             event
         })
 
@@ -55,26 +47,17 @@ export class GuestController {
     }
 
     static async editGuest(req: Request, res: Response) {
-        const { name, email, phone, birth_date } = req.body
+        const { name, contact, invite, isConfirmed} = req.body
         const { id } = req.params
-
-        let new_birth_date;
-        try {
-          let splitDate = birth_date.split("/");
-          splitDate.reverse().join("/");
-          new_birth_date = new Date(splitDate);
-        } catch (error) {
-          return res.status(400).send("Invalid Date Format");
-        }
 
         const guest = await guestRepository.findOneBy({id: Number(id)}) 
 
         if(!guest) return res.status(404).json({error: "Guest not found"})
 
         if(name) guest.name = name
-        if(email) guest.email = email
-        if(phone) guest.phone = phone
-        if(birth_date) guest.birth_date = new_birth_date
+        if(contact) guest.contact = contact
+        if(invite) guest.invite = invite
+        if(isConfirmed) guest.isConfirmed = isConfirmed
 
         const errors = await validate(guest)
 

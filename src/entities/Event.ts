@@ -20,7 +20,7 @@ export class Event {
   id: number;
 
   @Column()
-  @Length(1, 300)
+  @Length(1, 50)
   place: string;
 
   @Column()
@@ -32,11 +32,11 @@ export class Event {
   date: Date;
 
   @Column()
-  // @Length(1,10)
+  @Length(1,10)
   invite_number : number;
 
   @Column()
-  // @Length(1,1000)
+  @Length(1,100)
   event_budget : number;
 
   @CreateDateColumn({
@@ -58,10 +58,5 @@ export class Event {
   @OneToMany(() => Guest, (guest) => guest.event)
   guest: Guest[]
 
-
-  formatDate(date:string){
-    let splitDate = date.split("/");
-    return splitDate.reverse().join("/");
-  }
 
 }

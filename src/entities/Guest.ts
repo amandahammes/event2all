@@ -1,6 +1,6 @@
 import { Event } from './Event';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique, ManyToOne, JoinColumn } from "typeorm"
-import { Length, IsNotEmpty, IsEmail } from "class-validator"
+import { Length} from "class-validator"
 
 @Entity("guest")
 export class Guest {
@@ -11,17 +11,14 @@ export class Guest {
     @Length(3, 40)
     name: string
 
-    @Column({unique: true})
-    @IsEmail()
-    @IsNotEmpty()
-    email: string
+    @Column()
+    contact: string
 
     @Column()
-    @IsNotEmpty()
-    phone: string
+    invite: boolean
 
     @Column()
-    birth_date: Date
+    isConfirmed : boolean
 
     @Column()
     @CreateDateColumn()
