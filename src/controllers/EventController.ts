@@ -96,13 +96,13 @@ export class EventController {
         }
   
         if (user) {
-           event[-1 + event_id].users.push(user)
+          event[-1 + event_id].users.push(user)
           
         }
   
         try {
           await eventRepository.save(event);
-          return res.status(201).send(event)
+          return res.status(201).send(event[-1 + event_id])
         } catch (error) {
           return res.status(500).json(error);
         }
