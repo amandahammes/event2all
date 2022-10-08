@@ -79,39 +79,48 @@ export class EventController {
     }
     }
 
-  static async putAddUserinEvent(req: Request, res: Response) {
-    let {user_id, event_id} = req.body;
+  // static async putAddUserinEvent(req: Request, res: Response) {
+  //   let {user_id, event_id} = req.body;
 
-    try {
-      let user = await userRepository.findOneBy({ id: Number(user_id)}) 
+  //   try {
+  //     let user = await userRepository.findOneBy({ id: Number(user_id)}) 
 
-      if (!user) {
-        return res.status(404).json({ message: 'User not found'})
-      }
+  //     if (!user) {
+  //       return res.status(404).json({ message: 'User not found'})
+  //     }
 
-      let event = await eventRepository.findOneBy({ id: Number(event_id)})
+  //     let event = await eventRepository.findOneBy({ id: Number(event_id)})
 
-      if (!event) {
-        return res.status(404).json({ message: 'Event not found'})
-      }
+  //     if (!event) {
+  //       return res.status(404).json({ message: 'Event not found'})
+  //     }
+  //   } catch (error) {
+  //     return res.status(500).json(error);
+  //   }
 
-      if (user) {
-        event.users =
-        console.log(user);
-        
-      }
+  //   const users = await Promise.all(user_id.map((user_id: number) => {
+  //       const user = userRepository.findOne({where: {id: user_id}})
+    
+  //   if(!user) return null
+      
+  
+  //   return user
+  //   }))
 
-      try {
-        await eventRepository.save(event.users);
-      } catch (error) {
-        return res.status(500).json(error);
-      }
+  //   try {
+  //   const newEvent = eventRepository.update({
+  //       users,
+  //     }, {
+  //       users: users
+  //     });
+  //   await eventRepository.save(newEvent)
 
-  } catch (error) {
-    return res.status(500).json(error);
-  }
+  //   return res.status(201).json(newEvent)
 
-  }
+  //   } catch (error) {
+  //     return res.status(500).json(error);
+  //   }
+  // }
 
   static async getAllEvents(req: Request, res: Response) {
     let allEvents: Array<Event> = [];
