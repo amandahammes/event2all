@@ -32,11 +32,11 @@ export class Event {
   date: Date;
 
   @Column()
-  @Length(1,10)
+  // @Length(1,10)
   invite_number : number;
 
   @Column()
-  @Length(1,100)
+  // @Length(1,100)
   event_budget : number;
 
   @CreateDateColumn({
