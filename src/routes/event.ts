@@ -7,7 +7,7 @@ const router = Router();
 router
   .route("/event")
   .put([checkJwt], EventController.putAddUserinEvent)
-  .get([checkJwt],EventController.getAllEvents);
+  .get([checkJwt], EventController.getAllEvents);
 
 router.get("/event/:idUser([0-9]+)", [checkJwt], EventController.getEventbyIdUser);
 

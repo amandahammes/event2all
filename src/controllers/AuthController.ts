@@ -26,7 +26,7 @@ export class AuthController {
             return res.status(401).send("Email or password not valid!")
         }
 
-        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'}) //Alterar o jwt secret
+        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET ?? '', {expiresIn: '8h'});
 
         const {password: _, ...userLogin} = user
         

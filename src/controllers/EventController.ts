@@ -34,7 +34,10 @@ export class EventController {
 
     let {place, name, date, managers, event_budget, invite_number} = req.body;
 
-    managers.push(id);
+    let loggedUser = await userRepository.findOne({where: {id}})
+    
+    
+    managers.push(loggedUser?.email);
 
      let new_date;
     try {
@@ -45,9 +48,9 @@ export class EventController {
       return res.status(400).send("Invalid Date Format");
     } 
   
-    const users = await Promise.all(managers.map((manager: number) => {
-      const user = userRepository.findOne({where: {id: manager}})
-  
+    const users = await Promise.all(managers.map((manager: string) => {
+      const user = userRepository.findOne({where: {email: manager}})
+      
       if(!user) return null
     
 
@@ -55,6 +58,7 @@ export class EventController {
   }))
   
   const usersExists = users.findIndex((element) => element == null)
+  
   
   if(usersExists >= 0) return res.status(404).send("User not found")
 
