@@ -21,20 +21,23 @@ export class EventController {
 
         let payload
 
-	    try {
-		    payload = jwt.verify(token, process.env.JWT_SECRET??"");
-	    } catch (error) {
-		if (error instanceof jwt.JsonWebTokenError) {
-			return res.status(401).end()
-		}
-		return res.status(400).end()
-	    }
+        try {
+            payload = jwt.verify(token, process.env.JWT_SECRET??"");
+        } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).end()
+        }
+        return res.status(400).end()
+        }
 
     const {id} : any = payload
 
     let {place, name, date, managers, event_budget, invite_number} = req.body;
 
-    managers.push(id);
+    let loggedUser = await userRepository.findOne({where: {id}})
+
+
+    managers.push(loggedUser?.email);
 
      let new_date;
     try {
@@ -44,22 +47,23 @@ export class EventController {
     } catch (error) {
       return res.status(400).send("Invalid Date Format");
     } 
-  
-    const users = await Promise.all(managers.map((manager: number) => {
-      const user = userRepository.findOne({where: {id: manager}})
-  
+
+    const users = await Promise.all(managers.map((manager: string) => {
+      const user = userRepository.findOne({where: {email: manager}})
+
       if(!user) return null
-    
+
 
       return user
   }))
-  
+
   const usersExists = users.findIndex((element) => element == null)
-  
+
+
   if(usersExists >= 0) return res.status(404).send("User not found")
 
     try {
-    
+
       const newEvent = eventRepository.create({
         place,
         name,
