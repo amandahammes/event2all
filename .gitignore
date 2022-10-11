@@ -13,4 +13,3 @@ tests
 dist/
 dist
 .dist
-src/migrations
