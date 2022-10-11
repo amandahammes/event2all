@@ -17,7 +17,6 @@ export class QuotationController {
             return res.status(404).send("Event Not Found");
         }
 
-
         const newQuotation = quotationRepository.create({
             event_id,
             description,
@@ -133,7 +132,6 @@ export class QuotationController {
         }catch(error){
             return res.status(404).send("Id not Found!");
         }
-
 
         quotationRepository.delete(id_quotation);
 

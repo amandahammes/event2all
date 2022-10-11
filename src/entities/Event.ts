@@ -1,3 +1,4 @@
+import { ToDoList } from './ToDoList';
 import { User } from './User';
 import { Quotation } from './Quotation';
 import { Guest } from "./Guest"
@@ -8,8 +9,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToOne,
-  JoinColumn,
   ManyToMany
 } from "typeorm";
 import { Length, IsDate } from "class-validator";
@@ -58,5 +57,7 @@ export class Event {
   @OneToMany(() => Guest, (guest) => guest.event)
   guest: Guest[]
 
+  @OneToMany(() => ToDoList, (todolist) => todolist.event)
+  todolist: ToDoList[]
 
 }
