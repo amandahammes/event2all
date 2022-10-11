@@ -16,8 +16,11 @@ Este projeto necessita de alguns passos para ser testado corretamente, conforme 
 ## 🔧 Configurando o servidor
 
     1. Criar um banco de dados vazio no MySql.
-    2. Acesse via terminal a pasta ./src/ e execute o comando "npm i" para instalar todas as dependências do projeto.
-    3. Criar e editar o arquivo .env baseado no arquivo .envMODEL editando as inforções entre aspas para que correspondam às configurções do seu banco de dados recém criado assim como a porta desejado do servidor e salvar.
+    2. Acesse via terminal a pasta ./src/ e execute o comando "npm i" 
+    para instalar todas as dependências do projeto.
+    3. Criar e editar o arquivo .env baseado no arquivo .envMODEL editando
+    as inforções entre aspas para que correspondam às configurções do seu 
+    banco de dados recém criado assim como a porta desejado do servidor e salvar.
     4. Rodar o comando "npm run dev".
 
 ## 📦 Documentação da API
