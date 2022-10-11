@@ -5,12 +5,12 @@ import * as bodyParser from "body-parser";
 import routes from "./routes";
 import cors from "cors";
 import helmet from "helmet";
-
+import {headers} from "./middlewares/next.config";
 
 AppDataSource.initialize()
   .then(() => {
     const app = express();
-
+    app.use(headers)
     app.use(bodyParser.json());
     app.use(express.json())
     app.use(cors());
