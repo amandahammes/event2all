@@ -1,5 +1,5 @@
 
-# Event-Planner ![Logo](logotipo2.png)
+# ![Logo](logotipo2.png)
 
 Um casal, ao se deparar com o desafio de organizar o
 próprio casamento, decide fazer uma aplicação web para 
