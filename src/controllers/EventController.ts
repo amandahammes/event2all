@@ -30,6 +30,10 @@ export class EventController {
 
     let { place, name, date, managers, event_budget, invite_number } = req.body;
 
+    if (Array.isArray(managers) != true) {
+      return res.status(404).send("Invalid type of parameters on request!");
+    }
+
     let loggedUser = await userRepository.findOne({ where: { id } });
 
     managers.push(loggedUser?.email);
