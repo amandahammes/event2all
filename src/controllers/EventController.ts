@@ -329,7 +329,7 @@ export class EventController {
       allEventsbyUser = await eventRepository.find({
         where: { id: Number(idEvent), users: {id: Number(id)}}
       });
-      eventbyUser = allEventsbyUser.splice(0)
+      eventbyUser = allEventsbyUser[0]
 
     } catch (error) {
       return res.status(500).json(error);
