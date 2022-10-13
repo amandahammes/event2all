@@ -2,6 +2,6 @@ DB_HOST= localhost
 DB_PORT= "porta banco de dados"
 DB_USER= "usuário banco de dados"
 DB_PASS= "senha banco de dados"
-DB_NAME= event2all
+DB_NAME= "nome banco de dados"
 JWT_SECRET= "chefaogrupo1"
 PORT= "porta do servidor"

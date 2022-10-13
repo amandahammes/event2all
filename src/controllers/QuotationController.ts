@@ -8,7 +8,7 @@ export class QuotationController {
 
     static async createQuotation(req: Request, res: Response) {
 
-        const {event_id,description, provider, expected_expense} = req.body;
+        const { event_id, description, contact, provider, expected_expense, actual_expense, amount_already_paid} = req.body;
 
         let event;
         try {
@@ -20,10 +20,11 @@ export class QuotationController {
         const newQuotation = quotationRepository.create({
             event_id,
             description,
+            contact,
             provider,
             expected_expense,
-            actual_expense: 0,
-            amount_already_paid: 0,
+            actual_expense,
+            amount_already_paid,
         })
         
         await quotationRepository.save(newQuotation);
@@ -49,7 +50,7 @@ export class QuotationController {
     static async editQuotation(req:Request, res:Response) {
         let id_quotation = req.params.id;
 
-        const {description, provider, expected_expense, actual_expense, amount_already_paid} = req.body;
+        const {description, contact, provider, expected_expense, actual_expense, amount_already_paid} = req.body;
 
         let quotation: Quotation;
 
@@ -62,6 +63,10 @@ export class QuotationController {
         if(description){
             quotation.description = description;
         };
+
+        if(contact){
+            quotation.contact = contact;
+        }
 
         if(provider){
             quotation.provider = provider;

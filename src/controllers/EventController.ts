@@ -30,6 +30,10 @@ export class EventController {
 
     let { place, name, date, managers, event_budget, invite_number } = req.body;
 
+    if (Array.isArray(managers) != true) {
+      return res.status(404).send("Invalid type of parameters on request!");
+    }
+
     let loggedUser = await userRepository.findOne({ where: { id } });
 
     managers.push(loggedUser?.email);
@@ -282,5 +286,53 @@ export class EventController {
     } catch (error) {
       return res.status(400).send(error);
     }
+  }
+
+  static async getEventbyIdUserandbyIdEvent(req: Request, res: Response) {
+    const token = <any>req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) {
+      return res.status(401).send("Not logged.");
+    }
+
+    let payload;
+
+    try {
+      payload = jwt.verify(token, process.env.JWT_SECRET ?? "");
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        return res.status(401).end();
+      }
+      return res.status(400).end();
+    }
+
+    const { id }: any = payload;
+
+    const idEvent = req.params.idEvent;
+    let user: User;
+
+    try {
+      user = await userRepository.findOneOrFail({
+        where: { id: Number(id)},
+      });
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).send("User not found");
+      }
+      return res.status(500).json(error);
+    }
+
+    let allEventsbyUser: Array<Event>;
+    let eventbyUser
+    try {
+      allEventsbyUser = await eventRepository.find({
+        where: { id: Number(idEvent), users: {id: Number(id)}}
+      });
+      eventbyUser = allEventsbyUser[0]
+
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+    
+    return res.send(eventbyUser)
   }
 }

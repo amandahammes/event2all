@@ -8,6 +8,9 @@ export class Quotation{
     id:number;
 
     @Column()
+    contact: string;
+
+    @Column()
     @Length(1, 50)
     description: string;
 
