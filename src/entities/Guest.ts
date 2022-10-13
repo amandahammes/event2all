@@ -1,6 +1,6 @@
 import { Event } from './Event';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique, ManyToOne, JoinColumn } from "typeorm"
-import { Length} from "class-validator"
+import { Length } from "class-validator"
 
 @Entity("guest")
 export class Guest {
@@ -18,7 +18,7 @@ export class Guest {
     invite: boolean
 
     @Column()
-    isConfirmed : boolean
+    isConfirmed : string
 
     @Column()
     @CreateDateColumn()

@@ -5,9 +5,10 @@ import { validate } from "class-validator"
 
 export class GuestController {
     static async createGuest(req: Request, res: Response) {
-        const { name, contact, invite, isConfirmed, event_id } = req.body
+        const { name, contact, invite, isConfirmed } = req.body
+        const { event_id } = req.params
 
-        const event = await eventRepository.findOneBy({id: event_id})
+        const event = await eventRepository.findOneBy({id: Number(event_id)})
 
         if(!event) return res.status(404).json({error: "Event not found"})
 
@@ -15,8 +16,8 @@ export class GuestController {
             name,
             contact: "",
             invite: false,
-            isConfirmed: false,
-            event
+            isConfirmed: "",
+            event: event
         })
 
         const errors = await validate(newGuest)

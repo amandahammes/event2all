@@ -4,7 +4,7 @@ import { checkJwt } from "./../middlewares/checkJwt";
 
 const router = Router();
 
-router.post("/guest", [checkJwt], GuestController.createGuest);
+router.post("/guest/:event_id([0-9]+)", [checkJwt], GuestController.createGuest);
 router.get("/guest/event/:event_id([0-9]+)",[checkJwt],GuestController.getAllGuestByEventId);
 
 router
