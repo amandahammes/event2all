@@ -46,9 +46,7 @@ export class EventController {
     const users = await Promise.all(
       managers.map((manager: string) => {
         const user = userRepository.findOne({ where: { email: manager } });
-
         if (!user) return null;
-
         return user;
       })
     );
@@ -68,8 +66,8 @@ export class EventController {
       });
 
       await eventRepository.save(newEvent);
-
       return res.status(201).json(newEvent);
+      
     } catch (error) {
       return res.status(500).json(error);
     }

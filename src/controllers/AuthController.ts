@@ -30,16 +30,10 @@ export class AuthController {
 
         const {password: _, ...userLogin} = user
         
-        return res
-            .json({
-            user: userLogin,
-            token: token,
-        })
-    }
+        return res.json({ user: userLogin, token: token,})}
 
     static changePassword = async (req:Request, res:Response) =>{
         const token = <any>req.header("Authorization")?.replace("Bearer ", "")
-
 
         if (!token) {
             return res.status(401).send("Not logged.")
@@ -50,7 +44,7 @@ export class AuthController {
 	    try {
 		    payload = jwt.verify(token, process.env.JWT_SECRET??"");
 	    } catch (error) {
-		if (error instanceof jwt.JsonWebTokenError) {
+		    if (error instanceof jwt.JsonWebTokenError) {
 			return res.status(401).end()
 		}
 		return res.status(400).end()
@@ -79,6 +73,7 @@ export class AuthController {
         if(errors.length > 0) {
             return res.status(400).send(errors)
         }
+        
         newPassword = bcrypt.hashSync(newPassword, 10);
         user.password = newPassword;
         
