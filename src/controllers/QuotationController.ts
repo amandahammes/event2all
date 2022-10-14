@@ -12,7 +12,7 @@ export class QuotationController {
 
         let event;
         try {
-            event = await eventRepository.findOneOrFail({where:{id:event_id}});
+            event = await eventRepository.findOneOrFail({where:{id:event_id, deleted: false}});
         } catch (error) {
             return res.status(404).send("Event Not Found");
         }
@@ -39,7 +39,7 @@ export class QuotationController {
         let quotation;
 
         try {
-          quotation = await quotationRepository.findOneOrFail({where:{id : Number(id_quotation)}})  
+            quotation = await quotationRepository.findOneOrFail({where:{id : Number(id_quotation)}})  
         } catch (error) {
             return res.status(404).send("Quotation does not exist.")
         };
@@ -106,7 +106,7 @@ export class QuotationController {
 
         let event; 
         try {
-            event = await eventRepository.findOneOrFail({where:{id : Number(event_id)}});
+            event = await eventRepository.findOneOrFail({where:{id : Number(event_id), deleted: false}});
         } catch (error) {
             return res.status(404).send("Event Not Found");
         }

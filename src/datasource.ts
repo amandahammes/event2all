@@ -15,6 +15,9 @@ const options: DataSourceOptions = {
     logging: false,
     entities: [`${__dirname}/**/entities/*.{ts,js}`],
     migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
+    "extra": {
+        "connectionLimit": 5
+    }
 }
 
 export const AppDataSource = new DataSource(options);

@@ -38,6 +38,9 @@ export class Event {
   // @Length(1,100)
   event_budget : number;
 
+  @Column()
+  deleted: boolean;
+
   @CreateDateColumn({
     nullable: false
   })

@@ -8,7 +8,7 @@ export class GuestController {
         const { name, contact, invite, isConfirmed } = req.body
         const { event_id } = req.params
 
-        const event = await eventRepository.findOneBy({id: Number(event_id)})
+        const event = await eventRepository.findOneBy({id: Number(event_id), deleted: false})
 
         if(!event) return res.status(404).json({error: "Event not found"})
 
@@ -32,7 +32,7 @@ export class GuestController {
     static async getAllGuestByEventId(req: Request, res: Response) {
         const { event_id } = req.params
 
-        const eventExists = await eventRepository.countBy({id: Number(event_id)})
+        const eventExists = await eventRepository.countBy({id: Number(event_id), deleted: false})
 
         if(eventExists < 1) return res.status(404).json({error: "Event not found"})
 

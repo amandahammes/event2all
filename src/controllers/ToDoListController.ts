@@ -6,7 +6,7 @@ import { validate } from "class-validator"
 export class ListController {
     static async createList (req: Request, res: Response) {
         const { id, content, done, event_id } = req.body
-        const event = await eventRepository.findOneBy({id: event_id})
+        const event = await eventRepository.findOneBy({id: event_id, deleted: false})
 
         if(!event) return res.status(404).json({error: "Event not found"})
 
@@ -55,7 +55,7 @@ export class ListController {
     static async getAllListByEventId (req: Request, res: Response){
         const { event_id } = req.params
 
-        const eventExists = await eventRepository.countBy({id: Number(event_id)})
+        const eventExists = await eventRepository.countBy({id: Number(event_id), deleted: false})
 
         if(eventExists < 1) return res.status(404).json({error: "Event not found"})
 

@@ -67,6 +67,7 @@ export class EventController {
         users,
         event_budget,
         invite_number,
+        deleted: false
       });
 
       await eventRepository.save(newEvent);
@@ -78,10 +79,11 @@ export class EventController {
   }
 
   static async putAddUserinEvent(req: Request, res: Response) {
-    let { user_id, event_id } = req.body;
+    let { email } = req.body;
+    let { id } = req.params
 
     try {
-      let user = await userRepository.findOneBy({ id: Number(user_id) });
+      let user = await userRepository.findOneBy({ email: email });
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -92,14 +94,18 @@ export class EventController {
       if (!event) {
         return res.status(404).json({ message: "Event not found" });
       }
+      
+      if (event[-1 + parseInt(id)].deleted == true) return res.status(404).json({ message: "Event not found" });
+
+      //if (event[-1 + parseInt(id)].users.includes(user)) return res.status(409).json({ message: "User already invited" });
 
       if (user) {
-        event[-1 + event_id].users.push(user);
+        event[-1 + parseInt(id)].users.push(user);
       }
 
       try {
         await eventRepository.save(event);
-        return res.status(201).send(event[-1 + event_id]);
+        return res.status(201).send(event[-1 + parseInt(id)]);
       } catch (error) {
         return res.status(500).json(error);
       }
@@ -111,7 +117,7 @@ export class EventController {
   static async getAllEvents(req: Request, res: Response) {
     let allEvents: Array<Event> = [];
     try {
-      allEvents = await eventRepository.find();
+      allEvents = await eventRepository.find({where: {deleted: false}});
     } catch (error) {
       console.log(error);
       return res.status(500).send("Internal Server Error");
@@ -138,7 +144,7 @@ export class EventController {
     let allEventsbyUser: Array<Event>;
     try {
       allEventsbyUser = await eventRepository.find({
-        where: { users: { id: Number(idUser) } },
+        where: { users: { id: Number(idUser) }, deleted: false },
       });
     } catch (error) {
       return res.status(500).json(error);
@@ -164,7 +170,7 @@ export class EventController {
     let event: Event;
     try {
       event = await eventRepository.findOneOrFail({
-        where: { id: Number(id) },
+        where: { id: Number(id), deleted: false },
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
@@ -209,7 +215,7 @@ export class EventController {
     let event: Event;
     try {
       event = await eventRepository.findOneOrFail({
-        where: { id: Number(id) },
+        where: { id: Number(id), deleted: false },
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
@@ -219,7 +225,8 @@ export class EventController {
     }
 
     try {
-      eventRepository.delete(id);
+      event.deleted = true   
+      await eventRepository.save(event)
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         return res.status(400).json(error.message);
@@ -325,7 +332,7 @@ export class EventController {
     let eventbyUser
     try {
       allEventsbyUser = await eventRepository.find({
-        where: { id: Number(idEvent), users: {id: Number(id)}}
+        where: { id: Number(idEvent), users: {id: Number(id)}, deleted: false}
       });
       eventbyUser = allEventsbyUser[0]
 
