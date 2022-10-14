@@ -12,21 +12,23 @@ export class GuestController {
 
         if(!event) return res.status(404).json({error: "Event not found"})
 
-        const newGuest = guestRepository.create({
-            name,
-            contact: "",
-            invite: false,
-            isConfirmed: "",
-            event: event
-        })
+        try {
+            const newGuest = guestRepository.create({
+                name,
+                contact,
+                invite: false,
+                isConfirmed: "",
+                event: event
+            })
+            const errors = await validate(newGuest)
+            if(errors.length > 0) return res.status(400).send(errors)
+            await guestRepository.save(newGuest)
+            return res.status(200).send("Guest created!")
 
-        const errors = await validate(newGuest)
+        } catch (error) {
+            return res.status(201).json({message: "Guest Created"})
+        }
 
-        if(errors.length > 0) return res.status(400).send(errors)
-
-        await guestRepository.save(newGuest)
-
-        return res.status(201).json({message: "Guest Created"})
     }
 
     static async getAllGuestByEventId(req: Request, res: Response) {
