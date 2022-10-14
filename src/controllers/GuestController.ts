@@ -17,13 +17,13 @@ export class GuestController {
                 name,
                 contact,
                 invite: false,
-                isConfirmed: "",
+                isConfirmed,
                 event: event
             })
             const errors = await validate(newGuest)
             if(errors.length > 0) return res.status(400).send(errors)
             await guestRepository.save(newGuest)
-            return res.status(200).send("Guest created!")
+            return res.status(200).send(newGuest)
 
         } catch (error) {
             return res.status(201).json({message: "Guest Created"})
