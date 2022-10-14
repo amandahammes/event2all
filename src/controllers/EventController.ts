@@ -82,36 +82,27 @@ export class EventController {
     let { email } = req.body;
     let { id } = req.params
 
+    let user = await userRepository.findOneBy({ email: email });
+    if (!user) {return res.status(404).json({ message: "User not found" })};
+    console.log(user)
+    let event = await eventRepository.findOne({
+      where: { id: +id } ,
+      relations: {
+        users: true
+    }
+    });
+    if (!event) {return res.status(404).json({ message: "Event not found" })};
+    if (event.deleted == true) return res.status(404).json({ message: "Event not found" });
+    if (event.users.includes(user)) return res.status(409).json({ message: "User already invited" });
+
+    if (user) {event.users.push(user)};
+
     try {
-      let user = await userRepository.findOneBy({ email: email });
-
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      let event = await eventRepository.find({ relations: { users: true } });
-
-      if (!event) {
-        return res.status(404).json({ message: "Event not found" });
-      }
-      
-      if (event[-1 + parseInt(id)].deleted == true) return res.status(404).json({ message: "Event not found" });
-
-      //if (event[-1 + parseInt(id)].users.includes(user)) return res.status(409).json({ message: "User already invited" });
-
-      if (user) {
-        event[-1 + parseInt(id)].users.push(user);
-      }
-
-      try {
-        await eventRepository.save(event);
-        return res.status(201).send(event[-1 + parseInt(id)]);
-      } catch (error) {
-        return res.status(500).json(error);
-      }
+      await eventRepository.save(event);
     } catch (error) {
       return res.status(500).json(error);
     }
+    return res.status(201).send("User added");
   }
 
   static async getAllEvents(req: Request, res: Response) {
