@@ -217,6 +217,7 @@ export class EventController {
 
     try {
       event.deleted = true   
+      console.log(event)
       await eventRepository.save(event)
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
