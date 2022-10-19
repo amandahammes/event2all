@@ -16,7 +16,7 @@ export class GuestController {
             const newGuest = guestRepository.create({
                 name,
                 contact,
-                invite: false,
+                invite,
                 isConfirmed,
                 event: event
             })
