@@ -3,7 +3,7 @@
 
 Um casal, ao se deparar com o desafio de organizar o
 próprio casamento, decide fazer uma aplicação web para 
-ajudar na organizar o evento.
+ajudar na gestão do evento.
 
 ## 📋 Pré-requisitos
 
