@@ -37,5 +37,5 @@ Este projeto necessita de alguns passos para ser testado corretamente, conforme 
 *⌨️ com ❤️ por [Danilo Freitas](https://github.com/danilojpfreitas)<br/>
 *⌨️ com ❤️ por [Fabi Boniolo](https://github.com/Fabi-Boniolo)<br/>
 *⌨️ com ❤️ por [Fabrício Teixeira](https://github.com/FabriciodSTeixeira)<br/>
-*⌨️ com ❤️ por [Giordano Cassini](https://github.com/giordanocassini)
+*⌨️ com ❤️ por [Giordano Cassini](https://github.com/giordanocassini)<br/>
 *⌨️ com ❤️ por [Victor Franco](https://github.com/VictorF05)<br/>
