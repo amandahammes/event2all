@@ -13,3 +13,4 @@ tests
 dist/
 dist
 .dist
+db_data
