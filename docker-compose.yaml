@@ -2,7 +2,7 @@ version: '3.8'
 services:
   db:
     image: mysql
-    container_name: db
+    container_name: event2all-db
     ports:
       - 3306:3306
     expose:
@@ -30,7 +30,7 @@ services:
     volumes:
       - ../event2allfrontend/:/home/node/app
     ports:
-      - 5173:5173
+      - 8000:8000
     depends_on:
       - server
     restart: always
